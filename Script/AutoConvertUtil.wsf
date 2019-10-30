@@ -1,0 +1,19 @@
+<job id="AutoConvertUtil">
+<script language="JScript" src="AutoConvertLibrary.js"/>
+<script language="JScript" src="AutoConvertDefine.js"/>
+<script language="JScript" src="AutoConvertUtil.js"/>
+<script language="JScript">
+    if (String(WScript.FullName).match(/wscript\.exe$/i)) {
+        var args = [];
+        var objArgs = WScript.Arguments;
+        for (var i = 0; i < objArgs.length; i++) {
+            args.push(objArgs(i));
+        }
+        args = (args.length > 0) ? " \"" + args.join("\" \"") + "\"" : "";
+        WScript.Quit(acLib.shell.Run("cscript //nologo \"" + WScript.ScriptFullName + "\"" + args, 7, true));
+    } else {
+        var acu = new AutoConvertUtil();
+        WScript.Quit(acu.main());
+    }
+</script>
+</job>

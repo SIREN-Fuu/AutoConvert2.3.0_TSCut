@@ -1,0 +1,6 @@
+{
+    "type": 2,
+    "ext": "mp4",
+    "enc": "FFmpeg‚Ö‚ÌƒpƒX",
+    "opt": "-i <video> -i <audio> -threads 0 -vcodec libx264  -crf 20 -flags2  +dct8x8 -partitions all -bf 6 -b_strategy 2 -refs 6 -me_method hex -me_range 16 -directpred auto -x264opts non-deterministic=1:aq-strength=0.6 -acodec aac -strict experimental -ab 320k -ac 2 -ar 48000 -f mp4 <output>"
+}

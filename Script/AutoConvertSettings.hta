@@ -1,0 +1,808 @@
+<html>
+  <head>
+    <title>AutoConvert設定</title>
+    <hta:application
+      id="oAutoConvert"
+      applicationName="AutoConvertGUI"
+      border="thin"
+      innerBorder="no"
+      maximizeButton="no"
+      scroll="no"
+      selection="no"
+      version="2.2.0"
+    />
+    <meta http-equiv="MSThemeCompatible" content="yes">
+    <style type="text/css">
+      body {
+        background: #f0f0f0;
+      }
+      input, button, select, textarea {
+        width: 100%;
+      }
+      .main {
+        width: 100%;
+        font-size: 14px;
+        text-align: center;
+        overflow: hidden;
+      }
+      .container {
+        width: 646px;
+        margin: 0 auto;
+        text-align: left;
+        overflow: hidden;
+      }
+      .box1, .box2, .box3, .box4, .box5, .box6, .box7, .box8, .box9, .box10, .box11, .box12, .param1, .param2, .param3, .param4, .param5, .param6, .param7 {
+        float: left;
+        display: inline;
+        margin-left: 4px;
+        margin-bottom: 4px;
+      }
+      .box1 { width: 50px; }
+      .box2 { width: 104px; }
+      .box3 { width: 158px; }
+      .box4 { width: 212px; }
+      .box5 { width: 266px; }
+      .box6 { width: 320px; }
+      .box7 { width: 374px; }
+      .box8 { width: 428px; }
+      .box9 { width: 482px; }
+      .box10 { width: 536px; }
+      .box11 { width: 590px; }
+      .box12 { width: 644px; }
+      .param1 { width: 30px; }
+      .param2 { width: 60px; }
+      .param3 { width: 110px; }
+      .param4 { width: 40px; }
+      .param5 { width: 30px; }
+      .param6 { width: 30px; }
+      .param7 { width: 100px; }
+      .first {
+        margin-left: 0;
+        clear: left;
+      }
+      .parent {
+        padding-top: 0;
+        border-top: 0;
+      }
+      .clearfix:after {
+        visibility: hidden;
+        display: block;
+        font-size: 0;
+        content: " ";
+        clear: both;
+        height: 0;
+      }
+      .mark {
+        width:100%;
+        font-size: 18px;
+        margin:0 auto;
+        text-align: center;
+      }
+      .tab {
+        float: left;
+        height: 25px;
+        width: 150px;
+        text-align: center;
+        border-width: 1px;
+        border-style: solid;
+      }
+      .tab_select {
+        border-width: 1px;
+        border-bottom-color: transparent;
+      }
+      .tab_clear {
+        float: left;
+        height: 25px;
+        width: 4px;
+        border-style: solid;
+        border-width: 1px;
+        border-color: transparent transparent black transparent;
+      }
+      * html .clearfix { zoom: 1; }
+      *:first-child+html .clearfix { zoom: 1; } 
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <div class="container" style="height:50px;">
+        <div class="box12 first parent">
+          <div class="box3 first" style="margin-left:0px;">
+            <div class="tab_clear"></div>
+            <div id="tab_ac" class="tab tab_select">AutoConvert</div>
+            <div class="tab_clear"></div>
+          </div>
+          <div class="tab_clear"></div>
+          <div class="box3" style="margin-left:0px;">
+            <div class="tab_clear"></div>
+            <div id="tab_acu" class="tab">AutoConvertUtil</div>
+            <div class="tab_clear"></div>
+          </div>
+          <div class="tab_clear"></div>
+          <div class="box3" style="margin-left:0px;">
+            <div class="tab_clear"></div>
+            <div id="tab_detect" class="tab">
+              <select id="tab_detect_select" style="width:90%;">
+                <option value="-1"> - 詳細設定 - </option>
+                <option value="0"> サービス </option>
+                <option value="1"> 番組 </option>
+                <option value="2"> その他 </option>
+              </select>
+            </div>
+            <div class="tab_clear"></div>
+          </div>
+          <div class="tab_clear"></div>
+          <div class="box3" style="margin-left:0px;">
+            <div class="tab_clear"></div>
+            <div id="tab_preset" class="tab">
+              <select id="tab_preset_select" style="width:90%;">
+                <option value="-1"> - プリセット - </option>
+              </select>
+            </div>
+            <div class="tab_clear"></div>
+          </div>
+        </div>
+      </div>
+      <div id="ac" class="container" style="height:650px;">
+        <div class="box12 first">・パス</div>
+        <div class="box2 first">一時パス</div>
+        <div class="box3"><input id="ac_path_temppath" type="text" /></div>
+        <div class="box1"><input id="ac_path_temppath_browse" type="button" value="参照" /></div>
+        <div class="box2">DGIndex</div>
+        <div class="box3"><input id="ac_path_dgindex" type="text" /></div>
+        <div class="box1"><input id="ac_path_dgindex_browse" type="button" value="参照" /></div>
+        <div class="box2 first">DGIndexNV</div>
+        <div class="box3"><input id="ac_path_dgindexnv" type="text" /></div>
+        <div class="box1"><input id="ac_path_dgindexnv_browse" type="button" value="参照" /></div>
+        <div class="box2">ts2aac</div>
+        <div class="box3"><input id="ac_path_ts2aac" type="text" /></div>
+        <div class="box1"><input id="ac_path_ts2aac_browse" type="button" value="参照" /></div>
+        <div class="box2 first">comskip</div>
+        <div class="box3"><input id="ac_path_comskip" type="text" /></div>
+        <div class="box1"><input id="ac_path_comskip_browse" type="button" value="参照" /></div>
+        <div class="box2">comskip - ini</div>
+        <div class="box3"><input id="ac_path_comskipini" type="text" /></div>
+        <div class="box1"><input id="ac_path_comskipini_browse" type="button" value="参照" /></div>
+        <div class="box2 first">Caption2Ass</div>
+        <div class="box3"><input id="ac_path_caption2ass" type="text" /></div>
+        <div class="box1"><input id="ac_path_caption2ass_browse" type="button" value="参照" /></div>
+        <div class="box2">logoGuillo</div>
+        <div class="box3"><input id="ac_path_logoguillo" type="text" /></div>
+        <div class="box1"><input id="ac_path_logoguillo_browse" type="button" value="参照" /></div>
+        <div class="box2 first">DGDecode.dll</div>
+        <div class="box3"><input id="ac_path_dgdecode" type="text" /></div>
+        <div class="box1"><input id="ac_path_dgdecode_browse" type="button" value="参照" /></div>
+        <div class="box2">logoframe</div>
+        <div class="box3"><input id="ac_path_logoframe" type="text" /></div>
+        <div class="box1"><input id="ac_path_logoframe_browse" type="button" value="参照" /></div>
+        <div class="box2 first">chapter_exe</div>
+        <div class="box3"><input id="ac_path_chapterexe" type="text" /></div>
+        <div class="box1"><input id="ac_path_chapterexe_browse" type="button" value="参照" /></div>
+        <div class="box2">join_logo_scp</div>
+        <div class="box3"><input id="ac_path_joinlogoscp" type="text" /></div>
+        <div class="box1"><input id="ac_path_joinlogoscp_browse" type="button" value="参照" /></div>
+        <div class="box2 first">jls - avs</div>
+        <div class="box3"><input id="ac_path_jlsavs" type="text" /></div>
+        <div class="box1"><input id="ac_path_jlsavs_browse" type="button" value="参照" /></div>
+        <div class="box2">jls - cmd</div>
+        <div class="box3"><input id="ac_path_jlscmd" type="text" /></div>
+        <div class="box1"><input id="ac_path_jlscmd_browse" type="button" value="参照" /></div>
+        <div class="box2 first">AvsPmod</div>
+        <div class="box3"><input id="ac_path_avspmod" type="text" /></div>
+        <div class="box1"><input id="ac_path_avspmod_browse" type="button" value="参照" /></div>
+        <div class="box2">AvsPmod - avs</div>
+        <div class="box3"><input id="ac_path_avspmodavs" type="text" /></div>
+        <div class="box1"><input id="ac_path_avspmodavs_browse" type="button" value="参照" /></div>
+        <div class="box2 first">AutoVfr</div>
+        <div class="box3"><input id="ac_path_autovfr" type="text" /></div>
+        <div class="box1"><input id="ac_path_autovfr_browse" type="button" value="参照" /></div>
+        <div class="box2">AutoVfr - ini</div>
+        <div class="box3"><input id="ac_path_autovfrini" type="text" /></div>
+        <div class="box1"><input id="ac_path_autovfrini_browse" type="button" value="参照" /></div>
+        <div class="box2 first">AutoVfr - avs</div>
+        <div class="box3"><input id="ac_path_autovfravs" type="text" /></div>
+        <div class="box1"><input id="ac_path_autovfravs_browse" type="button" value="参照" /></div>
+        <div class="box2">avs2pipemod</div>
+        <div class="box3"><input id="ac_path_avs2pipemod" type="text" /></div>
+        <div class="box1"><input id="ac_path_avs2pipemod_browse" type="button" value="参照" /></div>
+        <div class="box2 first">neroAacEnc</div>
+        <div class="box3"><input id="ac_path_neroaacenc" type="text" /></div>
+        <div class="box1"><input id="ac_path_neroaacenc_browse" type="button" value="参照" /></div>
+        <div class="box2">fawcl</div>
+        <div class="box3"><input id="ac_path_fawcl" type="text" /></div>
+        <div class="box1"><input id="ac_path_fawcl_browse" type="button" value="参照" /></div>
+        <div class="box2 first">TsSplitter</div>
+        <div class="box3"><input id="ac_path_tssplitter" type="text" /></div>
+        <div class="box1"><input id="ac_path_tssplitter_browse" type="button" value="参照" /></div>
+        <div class="box2">TsConnector</div>
+        <div class="box3"><input id="ac_path_tsconnector" type="text" /></div>
+        <div class="box1"><input id="ac_path_tsconnector_browse" type="button" value="参照" /></div>
+        <div class="box2 first">Mp4Box</div>
+        <div class="box3"><input id="ac_path_mp4box" type="text" /></div>
+        <div class="box1"><input id="ac_path_mp4box_browse" type="button" value="参照" /></div>
+        <div class="box2">tc2mp4Mod</div>
+        <div class="box3"><input id="ac_path_tc2mp4mod" type="text" /></div>
+        <div class="box1"><input id="ac_path_tc2mp4mod_browse" type="button" value="参照" /></div>
+        <div class="box12 first">・設定</div>
+        <div class="box12 first">引数</div>
+        <div class="box2 first">dgindex</div>
+        <div class="box4"><input id="ac_settings_dgindex" type="text" /></div>
+        <div class="box2">neroAacEnc</div>
+        <div class="box4"><input id="ac_settings_neroaacenc" type="text" /></div>
+        <div class="box2 first">TsSplitter</div>
+        <div class="box4"><input id="ac_settings_tssplitter" type="text" /></div>
+        <div class="box2">logoGuillo</div>
+        <div class="box4"><input id="ac_settings_logoguillo" type="text" /></div>
+        <div class="box2 first">logoframe</div>
+        <div class="box4"><input id="ac_settings_logoframe" type="text" /></div>
+        <div class="box2">chapter_exe</div>
+        <div class="box4"><input id="ac_settings_chapterexe" type="text" /></div>
+        <div class="box2 first">join_logo_scp</div>
+        <div class="box4"><input id="ac_settings_joinlogoscp" type="text" /></div>
+        <div class="box2">AutoVfr</div>
+        <div class="box4"><input id="ac_settings_autovfr" type="text" /></div>
+        <div class="box12 first">その他</div>
+        <div class="box2 first" title="これより小さい値のTrimは無視されます">最小Trim</div>
+        <div class="box4"><input id="ac_settings_mintrim" type="text" /></div>
+        <div class="box2" title="ウィンドウオプション">ウィンドウ</div>
+        <div class="box4"><input id="ac_settings_window" type="text" /></div>
+        <div class="box6 first parent">
+          <div class="box1 first"><input id="ac_settings_failurepause" type="checkbox" /></div>
+          <div class="box2">failurepause</div>
+          <div class="box3" title="失敗した際にリトライ出来るようにポーズをかけます">
+            失敗時ポーズ
+          </div>
+        </div>
+        <div class="box6 parent">
+          <div class="box1 first"><input id="ac_settings_tssconnect" type="checkbox" /></div>
+          <div class="box2">tssconnect</div>
+          <div class="box3" title="TSSplitterで分離した後にHDのみを取り出して連結します">
+            HDのみ連結
+          </div>
+        </div>
+      </div>
+      <div id="acu" class="container" style="height:650px;display=none;">
+        <div class="box12 first">・パス</div>
+        <div class="box2 first">出力パス</div>
+        <div class="box8"><input id="acu_path_output" type="text" /></div>
+        <div class="box2"><input id="acu_path_output_browse" type="button" value="参照" /></div>
+        <div class="box2 first">移動パス</div>
+        <div class="box8"><input id="acu_path_move" type="text" /></div>
+        <div class="box2"><input id="acu_path_move_browse" type="button" value="参照" /></div>
+        <div class="box2 first">rplsinfo</div>
+        <div class="box8"><input id="acu_path_rplsinfo" type="text" /></div>
+        <div class="box2"><input id="acu_path_rplsinfo_browse" type="button" value="参照" /></div>
+        <div class="box2 first">SCRename</div>
+        <div class="box8"><input id="acu_path_screname" type="text" /></div>
+        <div class="box2"><input id="acu_path_screname_browse" type="button" value="参照" /></div>
+        
+        <div class="box12 first">・設定</div>
+        <div class="box4 first parent">
+          <div class="param1 first"><input id="acu_settings_move" type="checkbox" /></div>
+          <div class="param2">move</div>
+          <div class="param3" title="正常にエンコードされた場合にTSファイルを移動パスに移動します">
+            エンコード後移動
+          </div>
+        </div>
+        <div class="box4 parent">
+          <div class="param1 first"><input id="acu_settings_rplsinfo" type="checkbox" /></div>
+          <div class="param2">rplsinfo</div>
+          <div class="param3" title="rplsinfoを使用してTSの情報を取得します">
+            情報の取得
+          </div>
+        </div>
+        <div class="box4 parent">
+          <div class="param1 first"><input id="acu_settings_edcb" type="checkbox" /></div>
+          <div class="param2">edcb</div>
+          <div class="param3" title="EpgDataCapBonの出力する .ts.program.txt を使用してTSの情報を取得します">
+            情報の取得
+          </div>
+        </div>
+        <div class="box4 first parent">
+          <div class="param1 first"><input id="acu_settings_screname" type="checkbox" /></div>
+          <div class="param2">screname</div>
+          <div class="param3" title="SCRenameを使用して出力ファイル名や出力ディレクトリなどを取得します">
+            出力名を取得
+          </div>
+        </div>
+        <div class="box4 parent">
+          <div class="param1 first"><input id="acu_settings_ignoreErr" type="checkbox" /></div>
+          <div class="param2">ignoreErr</div>
+          <div class="param3" title="エラーが発生した場合に無視して続行します">
+            エラー無視
+          </div>
+        </div>
+        <div class="box4 parent">
+          <div class="param1 first"><input id="acu_settings_autoRetry" type="checkbox" /></div>
+          <div class="param2">autoRetry</div>
+          <div class="param3" title="失敗した場合にリトライ可能であれば自動リトライします">
+            自動リトライ
+          </div>
+        </div>
+        
+        <div class="box6 first parent">
+          <div class="box6 first" title="タイトルを置換します">置換設定</div>
+          <div class="box3 first"><input id="acu_settings_replace_before" type="text" title="置換前" /></div>
+          <div class="box3"><input id="acu_settings_replace_after" type="text" title="置換後" /></div>
+          <div class="box4 first">
+            <select id="acu_settings_replace" class="box4 first">
+              <option value="-1"> - </option>
+            </select>
+          </div>
+          <div class="box1"><input id="acu_settings_replace_add" type="button" value="追加" /></div>
+          <div class="box1"><input id="acu_settings_replace_delete" type="button" value="削除" /></div>
+        </div>
+        
+        <div class="box6 parent">
+          <div class="box6 first" title="タイトルなどから該当するものを話数に設定します">話数設定</div>
+          <div class="box3 first"><input id="acu_settings_ep_before" type="text" title="前" /></div>
+          <div class="box3"><input id="acu_settings_ep_after" type="text" title="後" /></div>
+          <div class="box4 first">
+            <select id="acu_settings_ep" class="box4 first">
+              <option value="-1"> - </option>
+            </select>
+          </div>
+          <div class="box1"><input id="acu_settings_ep_add" type="button" value="追加" /></div>
+          <div class="box1"><input id="acu_settings_ep_delete" type="button" value="削除" /></div>
+        </div>
+        
+        <div class="box12 first">・デフォルトパラメータ</div>
+        <div class="box6 first parent">
+          <div class="box6 first" title="使用するavsファイルを選択します">avsファイル</div>
+          <div class="box6 first">
+            <select id="acu_param_avs" class="box6 first">
+            </select>
+          </div>
+        </div>
+        
+        <div class="box6 parent">
+          <div class="box6 first" title="使用するプリセットファイルを選択します">プリセットファイル</div>
+          <div class="box6 first">
+            <select id="acu_param_preset" class="box6 first">
+            </select>
+          </div>
+        </div>
+        
+        <div class="box4 first parent">
+          <div class="param1 first"><input id="acu_param_cm" type="checkbox" /></div>
+          <div class="param2">cm</div>
+          <div class="param3" title="CMカット(cs, lg, jls, apm)のみを行います">
+            CMカットのみ
+          </div>
+        </div>
+        <div class="box4 parent">
+          <div class="param1 first"><input id="acu_param_cut" type="checkbox" /></div>
+          <div class="param2">cut</div>
+          <div class="param3" title="エンコードせずにTSのままカットして保存します">
+            TSカットのみ
+          </div>
+        </div>
+        <div class="box4 parent">
+          <div class="param1 first"><input id="acu_param_tss" type="checkbox" /></div>
+          <div class="param2">tss</div>
+          <div class="param3" title="事前にTSSplitterを使用します">
+            TSSplitter
+          </div>
+        </div>
+        <div class="box4 first parent">
+          <div class="param1 first"><input id="acu_param_nv" type="checkbox" /></div>
+          <div class="param2">nv</div>
+          <div class="param3" title="DGIndexNVを使用してTSを読み込みます">
+            DGIndexNV
+          </div>
+        </div>
+        <div class="box4 parent">
+          <div class="param1 first"><input id="acu_param_t2a" type="checkbox" /></div>
+          <div class="param2">t2a</div>
+          <div class="param3" title="ts2aacを使用してTSからaacを分離します">
+            ts2aac
+          </div>
+        </div>
+        <div class="box4 parent">
+          <div class="param1 first"><input id="acu_param_cs" type="checkbox" /></div>
+          <div class="param2">cs</div>
+          <div class="param3" title="comskipを使用して自動CMカットを行います">
+            comskip
+          </div>
+        </div>
+        <div class="box4 first parent">
+          <div class="param1 first"><input id="acu_param_lg" type="checkbox" /></div>
+          <div class="param2">lg</div>
+          <div class="param3" title="logoGuilloを使用して自動CMカットを行います">
+            logoGuillo
+          </div>
+        </div>
+        <div class="box4 parent">
+          <div class="param1 first"><input id="acu_param_jls" type="checkbox" /></div>
+          <div class="param2">jls</div>
+          <div class="param3" title="joinlogoscpを使用して自動CMカットを行います">
+            joinlogoscp
+          </div>
+        </div>
+        <div class="box4 parent">
+          <div class="param1 first"><input id="acu_param_apm" type="checkbox" /></div>
+          <div class="param2">apm</div>
+          <div class="param3" title="AvsPmodを使用して手動でカット編集します">
+            AvsPmod
+          </div>
+        </div>
+        <div class="box4 first parent">
+          <div class="param1 first"><input id="acu_param_c2a" type="checkbox" /></div>
+          <div class="param2">c2a</div>
+          <div class="param3" title="Caption2Assを使用して字幕の処理を行います">
+            Caption2Ass
+          </div>
+        </div>
+        <div class="box4 parent">
+          <div class="param1 first"><input id="acu_param_av" type="checkbox" /></div>
+          <div class="param2">av</div>
+          <div class="param3" title="AutoVfrを使用して可変フレームレートの処理を行います">
+            AutoVfr
+          </div>
+        </div>
+        <div class="box4 parent">
+          <div class="param1 first"><input id="acu_param_faw" type="checkbox" /></div>
+          <div class="param2">faw</div>
+          <div class="param3" title="FakeAacWavを使用して無劣化でaacを使用します">
+            FakeAacWav
+          </div>
+        </div>
+        
+        <div class="box12 first">・ファイル名</div>
+        <div class="box2 first">通常</div>
+        <div class="box4"><input id="acu_name_file_normal" type="text" /></div>
+        <div class="box2">rplsinfo</div>
+        <div class="box4"><input id="acu_name_file_rplsinfo" type="text" /></div>
+        <div class="box2 first">EDCB</div>
+        <div class="box4"><input id="acu_name_file_edcb" type="text" /></div>
+        <div class="box2">SCRename</div>
+        <div class="box4"><input id="acu_name_file_screname" type="text" /></div>
+        <div class="box12 first">・ディレクトリ名</div>
+        <div class="box2 first">基本</div>
+        <div class="box4"><input id="acu_name_dir_base" type="text" /></div>
+        <div class="box2">通常</div>
+        <div class="box4"><input id="acu_name_dir_normal" type="text" /></div>
+        <div class="box2 first">rplsinfo</div>
+        <div class="box4"><input id="acu_name_dir_rplsinfo" type="text" /></div>
+        <div class="box2">EDCB</div>
+        <div class="box4"><input id="acu_name_dir_edcb" type="text" /></div>
+        <div class="box2 first">SCRename</div>
+        <div class="box4"><input id="acu_name_dir_screname" type="text" /></div>
+      </div>
+      <div id="detect" class="container" style="height:650px;display=none;">
+        <div class="box12 first">・パラメータ</div>
+        <div class="box6 first parent">
+          <div class="box6 first" title="使用するavsファイルを選択します">avsファイル</div>
+          <div class="box1 first">
+            <select id="detect_level_avs" class="box1 first">
+              <option value="-1">-</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+          <div class="box5">
+            <select id="detect_param_avs" class="box5 first" disabled>
+            </select>
+          </div>
+        </div>
+        
+        <div class="box6 parent">
+          <div class="box6 first" title="使用するプリセットファイルを選択します">プリセットファイル</div>
+          <div class="box1 first">
+            <select id="detect_level_preset" class="box1 first">
+              <option value="-1">-</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+          <div class="box5">
+            <select id="detect_param_preset" class="box5 first" disabled>
+            </select>
+          </div>
+        </div>
+        
+        <div class="box4 first parent">
+          <div class="param4 first">
+            <select id="detect_level_cm" class="param4 first">
+              <option value="-1">-</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+          <div class="param5"><input id="detect_param_cm" type="checkbox" disabled /></div>
+          <div class="param6">cm</div>
+          <div class="param7" title="CMカット(cs, lg, jls, apm)のみを行います">
+            CMカットのみ
+          </div>
+        </div>
+        <div class="box4 parent">
+          <div class="param4 first">
+            <select id="detect_level_cut" class="param4 first">
+              <option value="-1">-</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+          <div class="param5"><input id="detect_param_cut" type="checkbox" disabled /></div>
+          <div class="param6">cut</div>
+          <div class="param7" title="エンコードせずにTSのままカットして保存します">
+            TSカットのみ
+          </div>
+        </div>
+        <div class="box4 parent">
+          <div class="param4 first">
+            <select id="detect_level_tss" class="param4 first">
+              <option value="-1">-</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+          <div class="param5"><input id="detect_param_tss" type="checkbox" disabled /></div>
+          <div class="param6">tss</div>
+          <div class="param7" title="事前にTSSplitterを使用します">
+            TSSplitter
+          </div>
+        </div>
+        <div class="box4 first parent">
+          <div class="param4 first">
+            <select id="detect_level_nv" class="param4 first">
+              <option value="-1">-</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+          <div class="param5"><input id="detect_param_nv" type="checkbox" disabled /></div>
+          <div class="param6">nv</div>
+          <div class="param7" title="DGIndexNVを使用してTSを読み込みます">
+            DGIndexNV
+          </div>
+        </div>
+        <div class="box4 parent">
+          <div class="param4 first">
+            <select id="detect_level_t2a" class="param4 first">
+              <option value="-1">-</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+          <div class="param5"><input id="detect_param_t2a" type="checkbox" disabled /></div>
+          <div class="param6">t2a</div>
+          <div class="param7" title="ts2aacを使用してTSからaacを分離します">
+            ts2aac
+          </div>
+        </div>
+        <div class="box4 parent">
+          <div class="param4 first">
+            <select id="detect_level_cs" class="param4 first">
+              <option value="-1">-</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+          <div class="param5"><input id="detect_param_cs" type="checkbox" disabled /></div>
+          <div class="param6">cs</div>
+          <div class="param7" title="comskipを使用して自動CMカットを行います">
+            comskip
+          </div>
+        </div>
+        <div class="box4 first parent">
+          <div class="param4 first">
+            <select id="detect_level_lg" class="param4 first">
+              <option value="-1">-</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+          <div class="param5"><input id="detect_param_lg" type="checkbox" disabled /></div>
+          <div class="param6">lg</div>
+          <div class="param7" title="logoGuilloを使用して自動CMカットを行います">
+            logoGuillo
+          </div>
+        </div>
+        <div class="box4 parent">
+          <div class="param4 first">
+            <select id="detect_level_jls" class="param4 first">
+              <option value="-1">-</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+          <div class="param5"><input id="detect_param_jls" type="checkbox" disabled /></div>
+          <div class="param6">jls</div>
+          <div class="param7" title="joinlogoscpを使用して自動CMカットを行います">
+            joinlogoscp
+          </div>
+        </div>
+        <div class="box4 parent">
+          <div class="param4 first">
+            <select id="detect_level_apm" class="param4 first">
+              <option value="-1">-</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+          <div class="param5"><input id="detect_param_apm" type="checkbox" disabled /></div>
+          <div class="param6">apm</div>
+          <div class="param7" title="AvsPmodを使用して手動でカット編集します">
+            AvsPmod
+          </div>
+        </div>
+        <div class="box4 first parent">
+          <div class="param4 first">
+            <select id="detect_level_c2a" class="param4 first">
+              <option value="-1">-</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+          <div class="param5"><input id="detect_param_c2a" type="checkbox" disabled /></div>
+          <div class="param6">c2a</div>
+          <div class="param7" title="Caption2Assを使用して字幕の処理を行います">
+            Caption2Ass
+          </div>
+        </div>
+        <div class="box4 parent">
+          <div class="param4 first">
+            <select id="detect_level_av" class="param4 first">
+              <option value="-1">-</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+          <div class="param5"><input id="detect_param_av" type="checkbox" disabled /></div>
+          <div class="param6">av</div>
+          <div class="param7" title="AutoVfrを使用して可変フレームレートの処理を行います">
+            AutoVfr
+          </div>
+        </div>
+        <div class="box4 parent">
+          <div class="param4 first">
+            <select id="detect_level_faw" class="param4 first">
+              <option value="-1">-</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+          <div class="param5"><input id="detect_param_faw" type="checkbox" disabled /></div>
+          <div class="param6">faw</div>
+          <div class="param7" title="FakeAacWavを使用して無劣化でaacを使用します">
+            FakeAacWav
+          </div>
+        </div>
+        <div class="box12 parent first">
+          <div class="box12 first">・リスト</div>
+          <div id="detect_name_parent" class="box6 first parent">
+            <div id="detect_name_desc" class="box6 first">含まれる文字列</div>
+            <div class="box6 first"><input id="detect_name" type="text" /></div>
+          </div>
+          
+          <div id="detect_detect_parent" class="box6 parent">
+            <div id="detect_detect_desc" class="box6 first">設定する文字列</div>
+            <div class="box6 first"><input id="detect_detect" type="text" /></div>
+          </div>
+          
+          <div id="detect_file_parent" class="box6 first parent">
+            <div id="detect_file_desc" class="box6 first">ファイル名として設定する文字列</div>
+            <div class="box6 first"><input id="detect_file" type="text" /></div>
+          </div>
+          
+          <div id="detect_dir_parent" class="box6 parent">
+            <div id="detect_dir_desc" class="box6 first">ディレクトリ名として設定する文字列</div>
+            <div class="box6 first"><input id="detect_dir" type="text" /></div>
+          </div>
+          <div class="box10 first">
+            <select id="detect_detect_list" size="6" class="box10 first">
+              <option value="-1"> - </option>
+            </select>
+          </div>
+          <div class="box2 parent">
+            <div class="box2 first"><input id="detect_detect_list_add" type="button" value="追加" /></div>
+            <div class="box2 first"><input id="detect_detect_list_delete" type="button" value="削除" /></div>
+            <div class="box2 first"><input id="detect_detect_list_up" type="button" value="↑" /></div>
+            <div class="box2 first"><input id="detect_detect_list_down" type="button" value="↓" /></div>
+          </div>
+        </div>
+        <div id="detect_search_parent" class="box12 parent first">
+          <div class="box12 first">・親リスト</div>
+          <div class="box6 first parent">
+            <div class="box6 first">対象となるマクロ</div>
+            <div class="box6 first"><input id="detect_search" type="text" /></div>
+          </div>
+          <div class="box6 parent" style="visibility:hidden;">
+            <div class="box6 first"></div>
+            <div class="box6 first"><input type="text" /></div>
+          </div>
+          
+          <div class="box10 first">
+            <select id="detect_search_list" size="6" class="box10 first">
+              <option value="-1"> - </option>
+            </select>
+          </div>
+          <div class="box2 parent">
+            <div class="box2 first"><input id="detect_search_list_add" type="button" value="追加" /></div>
+            <div class="box2 first"><input id="detect_search_list_delete" type="button" value="削除" /></div>
+            <div class="box2 first"><input id="detect_search_list_up" type="button" value="↑" /></div>
+            <div class="box2 first"><input id="detect_search_list_down" type="button" value="↓" /></div>
+          </div>
+          </div>
+      </div>
+      <div id="preset" class="container" style="height:650px;display=none;">
+        <div class="box12 first">・パラメータ</div>
+        <div class="box6 first parent">
+          <div class="box6 first">タイプ</div>
+          <div class="box6 first">
+            <select id="preset_type" title="エンコーダのタイプを選択します">
+              <option value="0"> x264 </option>
+              <option value="1"> AVC/H.264 </option>
+              <option value="2"> その他 </option>
+            </select>
+          </div>
+        </div>
+        <div class="box6 parent">
+          <div class="box6 first" title="出力ファイルの拡張子を指定します">拡張子</div>
+          <div class="box6 first"><input id="preset_ext" type="text" /></div>
+        </div>
+        
+        <div class="box12 first">エンコーダ</div>
+        <div class="box10 first"><input id="preset_enc" type="text" /></div>
+        <div class="box2"><input id="preset_enc_browse" type="button" value="参照" /></div>
+        <div class="box12 first" title="エンコーダのオプションを指定します。&#10;<video>: 入力(映像)&#10;<audio>: 入力(音声) *その他のみ&#10;<output>: 出力">オプション</div>
+        <div class="box12 first"><textarea id="preset_opt" style="height:100px;"></textarea></div>
+      </div>
+      <div class="container" style="height:50px;">
+        <div class="box2 first"></div>
+        <div class="box2"><input id="save_as" type="button" value="名前を付けて保存" style="visibility:hidden;" /></div>
+        <div class="box2"><input id="delete" type="button" value="削除" style="visibility:hidden;" /></div>
+        <div class="box2"><button id="reset" disable>リセット(<span style="text-decoration:underline;">R</span>)</button></div>
+        <div class="box2"><button id="save" disabled>保存(<span style="text-decoration:underline;">S</span>)</button></div>
+        <div class="box2"><input id="close" type="button" value="閉じる" /></div>
+      </div>
+    </div>
+    <object id="objHtmlDlgHelper" classid="CLSID:3050f4e1-98b5-11cf-bb82-00aa00bdce0b"></object>
+    <script type="text/javascript" src="AutoConvertLibrary.js"></script>
+    <script type="text/javascript" src="AutoConvertHta.js"></script>
+    <script type="text/javascript" src="AutoConvertModel.js"></script>
+    <script type="text/javascript" src="AutoConvertSettings.js"></script>
+  </body>
+</html>

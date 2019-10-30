@@ -1,0 +1,72 @@
+{
+    "ver": 220,
+    "path": {
+        "output": "",
+        "move": "",
+        "rplsinfo": "",
+        "screname": ""
+    },
+    "settings": {
+        "move": false,
+        "rplsinfo": false,
+        "edcb": true,
+        "screname": false,
+        "ignoreErr": false,
+        "autoRetry": false,
+        "replace": [
+            [
+                "置換前",
+                "置換後"
+            ]
+        ],
+        "ep": [
+            [
+                "話数前",
+                "話数後"
+            ],
+            [
+                "#",
+                ""
+            ],
+            [
+                "第",
+                "話"
+            ],
+            [
+                "第",
+                "回"
+            ]
+        ]
+    },
+    "param": {
+        "avs": "720p",
+        "preset": "x264",
+        "cm": false,
+        "cut": false,
+        "tss": false,
+        "nv": false,
+        "t2a": false,
+        "cs": false,
+        "lg": false,
+        "jls": false,
+        "apm": false,
+        "c2a": false,
+        "av": false,
+        "faw": false
+    },
+    "name": {
+        "file": {
+            "normal": "",
+            "rplsinfo": "$ACtitle2$( 第$ACnumber$話)( 「$ACsubtitle$」)",
+            "edcb": "$ACtitle2$( 第$ACnumber$話)( 「$ACsubtitle$」)",
+            "screname": "$SCtitle$ 第$SCnumber$話 「$SCsubtitle$」"
+        },
+        "dir": {
+            "base": "$SDYYYY$年$SDM$月",
+            "normal": "$Program$",
+            "rplsinfo": "$ACtitle2$",
+            "edcb": "$ACtitle2$",
+            "screname": "$SCtitle$"
+        }
+    }
+}

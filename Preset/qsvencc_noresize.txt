@@ -1,0 +1,6 @@
+{
+    "type": 1,
+    "ext": "mp4",
+    "enc": "QSVEncC.exe‚Ö‚ÌƒpƒX",
+    "opt": "--y4m --cqp 22:23:23 --scenechange --sar -16:-9 -i <video> -o <output>"
+}

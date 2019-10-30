@@ -1,0 +1,998 @@
+<html>
+<head>
+<title>AutoConvert</title>
+</head>
+<body>
+<pre>
+<span style="font-size:x-large">AutoConvert ver 2.3.0</span>
+<span style="font-size:large">by rndomhack</span>
+
+<span style="font-weight:bold;font-size:large">○ このバッチファイルについて</span>
+  TSファイルを自動エンコードするためのバッチファイルないしJScriptです。
+
+<span style="font-weight:bold;font-size:large">○ 主な機能</span>
+  <span style="font-weight:bold">＊</span> Avisynth(32bit) + x264を使用した自動エンコードが行えます。
+     また、標準入出力に対応したエンコーダもプリセットにより対応可能です。
+  <span style="font-weight:bold">＊</span> 番組名やサービス(チャンネル)名によってavsファイルを振り分けることができます。
+  <span style="font-weight:bold">＊</span> ファイルやEDCBのprogram.txt、rplsinfoから情報を取得し、エンコード後の名前を決めることが可能です。
+     さらにSCRenameを使えば、しょぼいカレンダーから正確な名前を取得できます。
+  <span style="font-weight:bold">＊</span> ドラッグアンドドロップでエンコードできるAutoConvertUtil、
+     GUIで確認しながらエンコード出来るAutoConvertGUI、単体で使用するAutoConvertがあります。
+  <span style="font-weight:bold">＊</span> Avisynthを使用しているため、新たにavsファイルを追加して
+     Bob化したり逆テレシネ化したりフィルターかけたりするようなこともできます。
+
+<span style="font-weight:bold;font-size:large">○ ファイル構成</span>
+  以下のような構成になっています。
+  
+  [ root ]
+      |
+      |----AutoConvert.bat                  <span style="color:steelblue">//メインバッチファイル</span>
+      |
+      |----AutoConvertUtil.bat              <span style="color:steelblue">//ドラッグアンドドロップバッチファイル</span>
+      |
+      |----AutoConvertGUI.bat               <span style="color:steelblue">//GUIバッチファイル</span>
+      |
+      |----AutoConvertSettings.bat          <span style="color:steelblue">//設定バッチファイル</span>
+      |
+      |----(AutoConvert.log)                <span style="color:steelblue">//AutoConvertUtil出力ログ</span>
+      |
+      |----[ Settings ]             <span style="color:steelblue">//設定フォルダ</span></span>
+      |      |
+      |      |----AutoConvert.txt           <span style="color:steelblue">//AutoConvert用設定ファイル</span>
+      |      |
+      |      |----AutoConvertUtil.txt       <span style="color:steelblue">//AutoConvertUtil用設定ファイル</span>
+      |      |
+      |      |----Program.txt               <span style="color:steelblue">//番組設定ファイル</span>
+      |      |
+      |      |----Service.txt               <span style="color:steelblue">//サービス設定ファイル</span>
+      |      |
+      |       ----Other.txt             <span style="color:steelblue">//その他のマクロ設定ファイル</span>
+      |
+      |----[ Preset ]               <span style="color:steelblue">//プリセットフォルダ</span>
+      |      |
+      |      |----[ logo ]                  <span style="color:steelblue">//ロゴデータフォルダ</span>
+      |      |
+      |      |----720p.avs                  <span style="color:steelblue">//avsファイル</span>
+      |      |
+      |      |----720p_ivtc.avs             <span style="color:steelblue">//avsファイル</span>
+      |      |
+      |      |----720p_bob.avs              <span style="color:steelblue">//avsファイル</span>
+      |      |
+      |      |----1080p.avs                 <span style="color:steelblue">//avsファイル</span>
+      |      |
+      |      |----1080p_ivtc.avs            <span style="color:steelblue">//avsファイル</span>
+      |      |
+      |      |----1080p_bob.avs             <span style="color:steelblue">//avsファイル</span>
+      |      |
+      |      |----1080p_noresize.avs        <span style="color:steelblue">//avsファイル</span>
+      |      |
+      |      |----1080p_noresize_ivtc.avs   <span style="color:steelblue">//avsファイル</span>
+      |      |
+      |      |----1080p_noresize_bob.avs    <span style="color:steelblue">//avsファイル</span>
+      |      |
+      |      |----crop.avs                  <span style="color:steelblue">//avsファイル</span>
+      |      |
+      |      |----autofvr.avs_              <span style="color:steelblue">//avsファイル(補助)</span>
+      |      |
+      |      |----avspmod.avs_              <span style="color:steelblue">//avsファイル(補助)</span>
+      |      |
+      |      |----jls.avs_                  <span style="color:steelblue">//avsファイル(補助)</span>
+      |      |
+      |      |----function.avsi             <span style="color:steelblue">//avsiファイル(関数)</span>
+      |      |
+      |      |----(acu.avs_)                <span style="color:steelblue">//自動作成avsファイル(AutoConvertUtil用)</span>
+      |      |
+      |      |----x264.txt                  <span style="color:steelblue">//x264用プリセットファイル</span>
+      |      |
+      |      |----x264_high.txt             <span style="color:steelblue">//x264用プリセットファイル</span>
+      |      |
+      |      |----x264_low.txt              <span style="color:steelblue">//x264用プリセットファイル</span>
+      |      |
+      |      |----x264_noresize.txt         <span style="color:steelblue">//x264用プリセットファイル</span>
+      |      |
+      |      |----qsvencc.txt               <span style="color:steelblue">//QSVEnc用プリセットファイル</span>
+      |      |
+      |      |----qsvencc_high.txt          <span style="color:steelblue">//QSVEnc用プリセットファイル</span>
+      |      |
+      |      |----qsvencc_low.txt           <span style="color:steelblue">//QSVEnc用プリセットファイル</span>
+      |      |
+      |      |----qsvencc_noresize.txt      <span style="color:steelblue">//QSVEnc用プリセットファイル</span>
+      |      |
+      |       ----ffmpeg.txt                <span style="color:steelblue">//FFmpeg用プリセットファイル</span>
+      |
+      |----[ Script ]               <span style="color:steelblue">//Scriptフォルダ</span>
+      |      |
+      |      |----AutoConvert.js            <span style="color:steelblue">//AutoConvertスクリプト</span>
+      |      |
+      |      |----AutoConvert.wsf           <span style="color:steelblue">//AutoConvertスクリプトファイル</span>
+      |      |
+      |      |----AutoConvertUtil.js        <span style="color:steelblue">//AutoConvertUtilスクリプト</span>
+      |      |
+      |      |----AutoConvertUtil.wsf       <span style="color:steelblue">//AutoConvertUtilスクリプトファイル</span>
+      |      |
+      |      |----AutoConvertGUI.js         <span style="color:steelblue">//AutoConvertGUIスクリプト</span>
+      |      |
+      |      |----AutoConvertGUI.hta        <span style="color:steelblue">//AutoConvertGUIアプリ</span>
+      |      |
+      |      |----AutoConvertSettings.js    <span style="color:steelblue">//AutoConvertSettingsスクリプト</span>
+      |      |
+      |      |----AutoConvertSettings.hta   <span style="color:steelblue">//AutoConvertSettingsアプリ</span>
+      |      |
+      |      |----AutoConvertModel.js       <span style="color:steelblue">//設定ファイルモデル</span>
+      |      |
+      |      |----AutoConvertHta.js         <span style="color:steelblue">//HTAライブラリ</span>
+      |      |
+      |       ----AutoConvertLibrary.js     <span style="color:steelblue">//ライブラリ</span>
+      |
+      |----[ Logo ]                 <span style="color:steelblue">//ロゴデータフォルダ</span>
+      |
+       ----[ Avisynth ]             <span style="color:steelblue">//Avisynthプラグインフォルダ</span>
+
+<span style="font-weight:bold;font-size:large">○ パラメータについて</span>
+  AutoConvertは使用するものをパラメータによって調整出来ます。
+  各パラメータと使用するものの表は以下のようになっています
+  <table border="1" cellpadding="3">
+      <tbody>
+          <tr>
+              <td>パラメータ</td>
+              <td>意味</td>
+              <td>説明</td>
+              <td>使用するもの</td>
+          </tr>
+          <tr>
+              <td>avs</td>
+              <td>avs</td>
+              <td>エンコードに使うavsを指定します(拡張子なし)<br />Presetフォルダのavsを使用します。</td>
+              <td><br /></td>
+          </tr>
+          <tr>
+              <td>preset</td>
+              <td>プリセット</td>
+              <td>プリセットに使うtxtを指定します(拡張子なし)<br />Presetフォルダのtxtを使用します。</td>
+              <td><br /></td>
+          </tr>
+          <tr>
+              <td>cm</td>
+              <td>CMカット</td>
+              <td>エンコードせずCMカットするかを指定します。<br />(事前にCMカットを行いたい場合など)<br />エンコードパラメータは無視されます。</td>
+              <td><br /></td>
+          </tr>
+          <tr>
+              <td>cut</td>
+              <td>TSカット</td>
+              <td>エンコードせずTSカットするかを指定します。<br />(TSのまま保存したい人向け)<br />エンコードパラメータは無視されます。</td>
+              <td>TsConnector</td>
+          </tr>
+          <tr>
+              <td>tss</td>
+              <td>TsSplitter</td>
+              <td>TsSplitterを使用するか指定します。</td>
+              <td>TsSplitter<br />(TsConnector)</td>
+          </tr>
+          <tr>
+              <td>nv</td>
+              <td>DGDecodeNV</td>
+              <td>デコードにDGDecNVを使用するか指定します。</td>
+              <td>DGDecodeNV</td>
+          </tr>
+          <tr>
+              <td>t2a</td>
+              <td>ts2aac</td>
+              <td>AAC分離にts2aacを使用するか指定します。</td>
+              <td>ts2aac</td>
+          </tr>
+          <tr>
+          <td>cs</td>
+              <td>comskip</td>
+              <td>comskipを使用するかを指定します。</td>
+              <td>comskip</td>
+          </tr>
+          <tr>
+          <td>lg</td>
+              <td>logoGuillo</td>
+              <td>logoGuilloを使用するかを指定します。</td>
+              <td>logoGuillo<br />ロゴデータ</td>
+          </tr>
+          <tr>
+              <td>jls</td>
+              <td>join_logo_scp</td>
+              <td>join_logo_scpを使用するかを指定します。</td>
+              <td>join_logo_scp<br />ロゴデータ</td>
+          </tr>
+          <tr>
+              <td>apm</td>
+              <td>AvsPmod</td>
+              <td>AvsPmodを使用するかを指定します。</td>
+              <td>AvsPmod</td>
+          </tr>
+          <tr>
+              <td>c2a</td>
+              <td>Caption2Ass</td>
+              <td>Caption2Assを使用するかを指定します。<br />エンコーダがその他では使用出来ません。</td>
+              <td>Caption2Ass</td>
+          </tr>
+          <tr>
+              <td>av</td>
+              <td>AutoVfr</td>
+              <td>AutoVfrを使用するかを指定します。<br />エンコーダがその他では使用出来ません。</td>
+              <td>AutoVfr<br />tc2mp4Mod<br />Its.dll<br />TIVTC.dll</td>
+          </tr>
+          <tr>
+              <td>faw</td>
+              <td>FakeAacWav</td>
+              <td>FakeAacWavを使用するか指定します。<br />エンコーダがその他では使用出来ません。</td>
+              <td>FakeAacWav</td>
+          </tr>
+      </tbody>
+  </table>
+
+  パラメータ以外でできることは以下のとおりです。
+  <table border="1" cellpadding="3">
+  <tbody>
+  <tr>
+  <td>できること</td>
+  <td>説明</td>
+  <td>使用するもの</td>
+  </tr>
+  <tr>
+  <td>逆テレシネ</td>
+  <td>詳しくは"ヒント"を参照してください</td>
+  <td>TIVTC.dll</td>
+  </tr>
+  <tr>
+  <td>Bob化</td>
+  <td>詳しくは"ヒント"を参照してください</td>
+  <td><br /></td>
+  </tr>
+  <tr>
+  <td>ロゴ消去</td>
+  <td>Logoフォルダに サービス名.lgd を設置</td>
+  <td>delogo.dll<br />ロゴデータ</td>
+  </tr>
+  </tbody>
+  </table>
+
+<span style="font-weight:bold;font-size:large">○ 導入</span>
+  設定ファイルは使用しないものについては空白のままにしておいてください。
+  Avisynthプラグインは<span style="font-weight:bold">標準のプラグインフォルダではなくて、
+  Avisynthフォルダにコピーするようにしてください。</span>
+  Avisynthやそのプラグインはすべて<span style="font-weight:bold">32bitで揃えてください。</span>
+
+  <span style="font-weight:bold">＃ 必要なもの</span>
+    <span style="font-weight:bold">＊</span> Avisynth             <a href="http://sourceforge.net/projects/avisynth2/">http://sourceforge.net/projects/avisynth2/</a>
+      動画編集
+        インストーラーに従ってインストール
+
+    <span style="font-weight:bold">＊</span> BassAudio            <a href="http://behappy.codeplex.com/">http://behappy.codeplex.com/</a>
+      BASSを使用して音声を読み込む
+      BeHappyのpluginsフォルダに入っている
+        BassAudio.dll → Avisynth\
+        bass.dll → Avisynth\
+        bass_aac.dll → Avisynth\
+
+    <span style="font-weight:bold">＊</span> TDeint               <a href="http://bengal.missouri.edu/~kes25c/">http://bengal.missouri.edu/~kes25c/</a>
+      インターレース解除
+        TDeint.dll → Avisynth\
+
+    <span style="font-weight:bold">＊</span> DGMPGDec             <a href="http://neuron2.net/dgmpgdec/dgmpgdec.html">http://neuron2.net/dgmpgdec/dgmpgdec.html</a>
+      AAC分離 TSデコード
+        DGDecode.dll → Avisynth\
+        設定の AutoConvert -&gt; パス -&gt; DGIndex に DGIndex.exe へのパスを記述
+
+    <span style="font-weight:bold">＊</span> avs2pipemod          <a href="http://csbarn.blogspot.jp/">http://csbarn.blogspot.jp/</a>
+      AVSからエンコーダ等への橋渡し
+      32bit版を使用してください。
+        設定の AutoConvert -&gt; パス -&gt; avs2pipemod に avs2pipemod.exe へのパスを記述
+
+    <span style="font-weight:bold">＊</span> neroAacEnc           <a href="http://www.nero.com/jpn/technologies-aac-codec.html">http://www.nero.com/jpn/technologies-aac-codec.html</a>
+      AACエンコーダ
+        設定の AutoConvert -&gt; パス -&gt; neroAacEnc に neroAacEnc.exe へのパスを記述
+
+    <span style="font-weight:bold">＊</span> x264                 <a href="http://x264.nl/">http://x264.nl/</a>
+      H.264エンコーダ
+        設定の プリセット(x264, x264_high, x264_lowなど) -&gt; エンコーダー に x264.exe へのパスを記述
+
+    <span style="font-weight:bold">＊</span> MP4Box               <a href="http://gpac.wp.mines-telecom.fr/">http://gpac.wp.mines-telecom.fr/</a>
+      H.264とAACを結合
+        設定の AutoConvert -&gt; パス -&gt; MP4Box に MP4Box.exe へのパスを記述
+
+  <span style="font-weight:bold">＃ 必要に応じて</span>
+    <span style="font-weight:bold">＊</span> rplsinfo             <a href="http://saysaysay.net/rplstool/rplsinfo/">http://saysaysay.net/rplstool/rplsinfo/</a>
+      TSから様々な情報を取得
+      EDCBが作成する".program.txt"がない場合(TvTestなどで録画したときなど)に使用してください
+        設定の AutoConvertUtil -&gt; パス -&gt; rplsinfo に rplsinfo.exe へのパスを記述
+        設定の AutoConvertTuil -&gt; 設定 -&gt; rplsinfo を チェック
+        
+    <span style="font-weight:bold">＊</span> SEt版ビルド          <a href="http://forum.doom9.org/showthread.php?t=148782">http://forum.doom9.org/showthread.php?t=148782</a>
+      Avisynthの高速化
+        avisynth.dll → 32bitOSの場合 : C:\Windows\System32\
+                     → 64bitOSの場合 : C:\Windows\SysWOW64\
+
+    <span style="font-weight:bold">＊</span> DGDecNV              <a href="http://neuron2.net/dgdecnv/dgdecnv.html">http://neuron2.net/dgdecnv/dgdecnv.html</a>
+      DGMPGDecのCUDA版(有料)
+        DGDecodeNV.dll → Avisynth\
+        設定の AutoConvert -&gt; パス -&gt; DGIndexNV に DGIndexNV.exe へのパスを記述
+
+    <span style="font-weight:bold">＊</span> ts2aac               ミラー : <a href="http://www3.wazoku.net/2sen/dtvup/">http://www3.wazoku.net/2sen/dtvup/</a>
+      TSからAACを分離
+      DGIndexのAAC分離には不具合があるため
+        設定の AutoConvert -&gt; パス -&gt; ts2aac に ts2aac.exe へのパスを記述
+
+    <span style="font-weight:bold">＊</span> comskip              <a href="http://www.kaashoek.com/comskip/">http://www.kaashoek.com/comskip/</a>
+      CMカット
+      Logoフォルダに サービス名.logo.txt、サービス名.ini が存在する場合、自動的に読み込みます。
+      通常は、設定の AutoConvert -&gt; パス -&gt; comskip - ini に存在するiniを読み込みます。
+      comskip.iniを作成する際は以下の点を変更してください。
+          output_edl=0
+          output_avisynth=1
+          avisynth_options=""
+        設定の AutoConvert -&gt; パス -&gt; comskip に comskip.exe へのパスを記述
+
+    <span style="font-weight:bold">＊</span> logoGuillo           <a href="http://loggialogic.blogspot.jp/">http://loggialogic.blogspot.jp/</a>
+      CMカット
+        設定の AutoConvert -&gt; パス -&gt; logoguillo に logoGuillo.exe へのパスを記述
+        Logoフォルダに サービス名.lgd、サービス名.lgd.autoTune.param を配置
+
+    <span style="font-weight:bold">＊</span> join_logo_scp           <a href="http://www1.axfc.net/uploader/so/2694688">http://www1.axfc.net/uploader/so/2694688</a>
+      CMカット
+      本来3つのソフトですが、AutoConvert上ではjoin_logo_scpとひとくくりで扱います。
+      (すべてYobi氏版のを使用します)
+      Logoフォルダに サービス名.logoframe.txt が存在する場合、自動的に読み込みます。
+        設定の AutoConvert -&gt; パス -&gt; logoframe に logoframe.exe へのパスを記述
+        設定の AutoConvert -&gt; パス -&gt; chapter_exe に chapter_exe.exe へのパスを記述
+        設定の AutoConvert -&gt; パス -&gt; join_logo_scp に join_logo_scp.exe へのパスを記述
+        Logoフォルダに サービス名.lgd を配置
+        chapter_exeはchapter_exeのあるフォルダにavsinp.aui
+        (warpsharpパッケージ http://www.avisynth.info/?%A5%A2%A1%BC%A5%AB%A5%A4%A5%D6 に含まれる)が必要 
+
+    <span style="font-weight:bold">＊</span> AvsPmod              <a href="http://forum.doom9.org/showthread.php?t=153248">http://forum.doom9.org/showthread.php?t=153248</a>
+      avsファイル編集
+      CMカットの補助に使用します。
+        設定の AutoConvert -&gt; パス -&gt; AvsPmod に AvsPmod.exe へのパスを記述
+
+    <span style="font-weight:bold">＊</span> Caption2Ass_PCR      <a href="http://plaza.rakuten.co.jp/mark10als/">http://plaza.rakuten.co.jp/mark10als/</a>
+      srt字幕
+      logoGuilloのサポートも出来る
+      バージョンはmodでもそうでなくても大丈夫なはず。
+        設定の AutoConvert -&gt; パス -&gt; caption2ass に Caption2Ass.exe へのパスを記述
+
+    <span style="font-weight:bold">＊</span> AutoVfr              <a href="http://putin999.blog.fc2.com/">http://putin999.blog.fc2.com/</a>
+      可変フレームレート用のdefを自動で作成
+      設定の AutoConvert -&gt; パス -&gt; AutoVfr - avs のavsを使用し、
+      設定の AutoConvert -&gt; パス -&gt; AutoVfr - ini のiniを読み込みます。
+        Its.dll → Avisynth\
+        設定の AutoConvert -&gt; パス -&gt; AutoVfr に AutoVfr.exe へのパスを記述
+
+        <span style="font-weight:bold">＋</span> tc2mp4Mod            <a href="http://vfrmaniac.fushizen.eu/">http://vfrmaniac.fushizen.eu/</a>
+          逆テレシネ
+            TIVTC.dll → Avisynth\
+
+        <span style="font-weight:bold">＋</span> TIVTC.dll            <a href="http://bengal.missouri.edu/~kes25c/">http://bengal.missouri.edu/~kes25c/</a>
+          逆テレシネ
+            TIVTC.dll → Avisynth\
+
+    <span style="font-weight:bold">＊</span> aacfaw.aui           <a href="http://www.rutice.net/">http://www.rutice.net/</a>
+      AACを劣化なく編集
+      下のFakeAacWavとセットです。
+        aacfaw.aui → Avisynth\
+
+        <span style="font-weight:bold">＋</span> FakeAacWav           ミラー : <a href="http://www2.wazoku.net/2sen/friioup/">http://www2.wazoku.net/2sen/friioup/</a>
+          aacfawで出力した偽装WAVをAACに戻す
+          上のFakeAacWavとセットです。
+          コマンドライン版 (fawcl.exe) を使用します。
+          うまくいかない場合は通常版 (faw.exe) でも大丈夫です。
+          aacfaw.auiとセットです。
+            設定の AutoConvert -&gt; パス -&gt; fawcl に fawcl.exe へのパスを記述
+
+    <span style="font-weight:bold">＊</span> 透過性ロゴフィルタ   ミラー : <a href="http://rndomhack.com/2012/12/11/autoconvert/">http://rndomhack.com/2012/12/11/autoconvert/</a>
+      ロゴ(ウォーターマーク)を除去
+        delogo.dll → Avisynth\
+        サービス名.lgd → Logo\
+
+    <span style="font-weight:bold">＊</span> TsSplitter           ミラー : <a href="http://www3.wazoku.net/2sen/dtvup/">http://www3.wazoku.net/2sen/dtvup/</a>
+      TSファイルのカット
+      TSカットの場合は下のTsConnectorとセットです。
+        設定の AutoConvert -&gt; パス -&gt; TsSplitter に TsSplitter.exe へのパスを記述
+
+        <span style="font-weight:bold">＋</span> TsConnector          ミラー : <a href="http://www3.wazoku.net/2sen/dtvup/">http://www3.wazoku.net/2sen/dtvup/</a>
+          TSファイルの結合
+          TsTimeKeeper "up0802.zip" の中にあります。
+          TSカットの場合は上のTsSplitterとセットです。
+            設定の AutoConvert -&gt; パス -&gt; TsConnector に TsConnector.exe へのパスを記述
+
+    <span style="font-weight:bold">＊</span> FFmpeg               使用ビルド : <a href="http://ffmpeg.zeranoe.com/builds/">http://ffmpeg.zeranoe.com/builds/</a>
+      エンコーダ
+      H.264以外へのエンコードの場合に使えます。
+        設定の プリセット(ffmpegなど) -&gt; エンコーダー に ffmpeg.exe へのパスを記述
+
+    <span style="font-weight:bold">＊</span> QSVEnc               <a href="http://rigaya34589.blog135.fc2.com/">http://rigaya34589.blog135.fc2.com/</a>
+      エンコーダ
+      QSVを使用したH.264へのエンコードの場合に使えます。
+        設定の プリセット(qsvenc, qsvenc_high, qsvenc_lowなど) -&gt; エンコーダー に QSVEncC.exe へのパスを記述
+
+    <span style="font-weight:bold">＊</span> SCRename             ミラー :<a href="http://www3.wazoku.net/2sen/dtvup/">http://www3.wazoku.net/2sen/dtvup/</a>
+      しょぼいカレンダーから情報を取得
+      エンコード後の名前取得に使用します。
+        設定の AutoConvertUtil -&gt; パス -&gt; SCRename に SCRename.vbs へのパスを記述
+
+  <span style="font-weight:bold">＃ ビルドについて</span>
+     x264とMP4BoxはPOP4@4bit(<a href="http://pop.4-bit.jp/">http://pop.4-bit.jp/</a>)さんの所で独自ビルドが公開されています。
+     (動作確認はそちらで行なっています。こちらを推薦。)
+
+<span style="font-weight:bold;font-size:large">○ 設定</span>
+  <span style="font-weight:bold">＃ 設定ファイルについて</span>
+    以前は設定ファイルに直接書き込む必要がありましたが、
+    現在はAutoConvertSettingsがあるためその必要はありません。
+    AutoConvertSettingsで不明な項目がある場合は参考にしてください。
+    
+    設定ファイルはJSON形式で書かれています。
+    <span style="font-weight:bold">JSONは \ がエスケープとなりますので記述する際は \\ としてください。</span>
+    設定ファイルの文法的チェックは、
+    <a href="http://jsonlint.com/">http://jsonlint.com/</a> や <a href="http://www.jslint.com/">http://www.jslint.com/</a>
+    などで行うことができます。
+    また、パスは<span style="font-weight:bold">実行ファイルへのパス(～.exeまで)</span>を記入してください。
+    (正確には、cscript等ではJSONオブジェクトが使用できません。
+    そのためevalで評価を行なっていますので、本来のJSONとは異なります)
+    以下JSONを知らない方への簡単な説明。
+    --------------------------------------------------
+    {
+        "項目1": {
+            "設定1": "内容1",         ←文字列は"で囲む
+            "設定2": "内容2",
+            "設定2": "内容3"          ←最後の項目には , は不要
+        },
+        "項目2": {
+            "設定1": true,            ←真偽値は"で囲まない
+            "設定2": false,
+            "設定3": 1,               ←数値は"で囲まない
+            "設定4": 2,
+            "設定5": 3,
+            "設定6": {
+                "小設定1": "内容1",   ←子設定も同様
+                "小設定2": "内容2",
+                "小設定3": "内容3"
+            },
+            "設定7": 4,
+            "設定8": 5
+        }
+    }
+    --------------------------------------------------
+  
+  <span style="font-weight:bold">＃ AutoConvert.txt の設定</span>
+    この項目はAutoConvertSettingsのAutoConvertタブと同様のものです。
+    --------------------------------------------------
+    {
+        "path": {
+            <span style="color:steelblue">//$AutoConvert$でAutoConvertフォルダへのパスに置換される</span>
+            "temppath": "",        <span style="color:steelblue">//一時フォルダへのパス</span>
+            "dgindex": "",                <span style="color:steelblue">//DGIndex.exe へのパス</span>
+            "dgindexnv": "",              <span style="color:steelblue">//[任意] DGIndexNV.exe へのパス</span>
+            "ts2aac": "",                 <span style="color:steelblue">//[任意] ts2aac.exe へのパス</span>
+            "comskip": "",                <span style="color:steelblue">//[任意] comskip.exe へのパス</span>
+            "comskipini": "$AutoConvert$\\Preset\\comskip.ini",
+                <span style="color:steelblue">//[任意] comskip.ini へのパス(logoGuillo.exeに使用)</span>
+                <span style="color:steelblue">//初期設定では AutoConvertフォルダのPreset\comskip.ini</span>
+            "caption2ass": "",            <span style="color:steelblue">//[任意] Caption2Ass.exe へのパス</span>
+            "logoguillo": "",             <span style="color:steelblue">//[任意] logoGuillo.exe へのパス</span>
+            "dgdecode": "$AutoConvert$\\Avisynth\\DGDecode.dll",
+                <span style="color:steelblue">//[任意] DGDecode.dll へのパス(logoGuillo.exeに使用)</span>
+                <span style="color:steelblue">//初期設定では AutoConvertフォルダのAvisynth\DGDecode.dll</span>
+            "logoframe": "",              <span style="color:steelblue">//[任意] logoframe.exe へのパス</span>
+            "chapterexe": "",             <span style="color:steelblue">//[任意] chapter_exe.exe へのパス</span>
+            "joinlogoscp": "",            <span style="color:steelblue">//[任意] join_logo_scp.exe へのパス</span>
+            "jlsavs": "$AutoConvert$\\Preset\\jls.avs",
+                <span style="color:steelblue">//[任意] logoframe や chapter_exe で使用するavsファイルへのパス</span>
+                <span style="color:steelblue">//初期設定では AutoConvertフォルダのPreset\jls.avs</span>
+            "jlscmd": "$AutoConvert$\\Preset\\jls.txt",
+                <span style="color:steelblue">//[任意] join_logo_scp で使用するcmdファイルへのパス</span>
+                <span style="color:steelblue">//初期設定では AutoConvertフォルダのPreset\jls.txt</span>
+            "avspmod": "",                <span style="color:steelblue">//[任意] AvsPmod.exe へのパス</span>
+            "avspmodavs": "$AutoConvert$Preset\\avspmod.avs",
+                <span style="color:steelblue">//[任意] AvsPmod で使用するavsファイルへのパス</span>
+                <span style="color:steelblue">//初期設定では AutoConvertフォルダのPreset\avspmod.avs</span>
+            "autovfr": "",                <span style="color:steelblue">//[任意] AutoVfr.exe へのパス</span>
+            "autovfrini": "$AutoConvert$\\Preset\\AutoVfr.ini",
+                <span style="color:steelblue">//[任意] AutoVfr.ini へのパス</span>
+                <span style="color:steelblue">//初期設定では AutoConvertフォルダのPreset\AutoVfr.ini</span>
+            "autovfravs": "$AutoConvert$\\Preset\\autovfr.avs",
+                <span style="color:steelblue">//[任意] AutoVfr で使用するavsファイルへのパス</span>
+                <span style="color:steelblue">//初期設定では AutoConvertフォルダのPreset\autovfr.avs</span>
+            "avs2pipemod": "",            <span style="color:steelblue">//avs2pipemod.exe へのパス</span>
+            "neroaacenc": "",             <span style="color:steelblue">//neroAacEnc.exe へのパス</span>
+            "fawcl": "",                  <span style="color:steelblue">//[任意] fawcl.exe へのパス</span>
+            "tssplitter": "",             <span style="color:steelblue">//[任意] TsSplitter.exe へのパス</span>
+            "tsconnector": "",            <span style="color:steelblue">//[任意] TsConnector.exe へのパス</span>
+            "mp4box": ""                  <span style="color:steelblue">//Mp4Box.exe へのパス</span>
+        },
+        "settings": {
+            "dgindex": "-ia 3 -fo 0 -yr 1",
+                <span style="color:steelblue">//DGIndex のコマンドラインオプション</span>
+            "neroaacenc": "-cbr 320000 -lc",
+                <span style="color:steelblue">//neroAacEnc のコマンドラインオプション</span>
+            "tssplitter": "-EIT -ECM -EMM -SD -1SEG",
+                <span style="color:steelblue">//TsSplitter のコマンドラインオプション</span>
+            "logoguillo": "",
+                <span style="color:steelblue">//logoGuillo のコマンドラインオプション</span>
+            "logoframe": "",
+                <span style="color:steelblue">//logoframe のコマンドラインオプション</span>
+            "chapterexe": "-m 15 -s 10",
+                <span style="color:steelblue">//chapter_exe のコマンドラインオプション</span>
+            "joinlogoscp": "",
+                <span style="color:steelblue">//join_logo_scp のコマンドラインオプション</span>
+            "autovfr": "-skip 1 -ref 150",
+                <span style="color:steelblue">//AutoVfr のコマンドラインオプション</span>
+            "mintrim": 5,
+                <span style="color:steelblue">//Trim取得の際、このフレーム未満であれば除外する</span>
+                <span style="color:steelblue">//(例: Trim(0,7) ++ Trim(120,123) ++ Trim(167, 190)</span>
+                <span style="color:steelblue">// → Trim(0,7) ++ Trim(167, 190))</span>
+            "window": 7,
+                <span style="color:steelblue">//WshShell第2パラメータ</span>
+                <span style="color:steelblue">//5などで最小化しなくなる</span>
+            "failurepause": false,
+                <span style="color:steelblue">//失敗した場合にそのパートからリトライするか尋ねる</span>
+            "tssconnect": false
+                <span style="color:steelblue">//tssパラメータでTsSplitterを処理する際、</span>
+                <span style="color:steelblue">//複数の _HD-*.ts ファイルに分割さてれている場合は、</span>
+                <span style="color:steelblue">//TsConnectorを使い連結する</span>
+                <span style="color:steelblue">//(わかさトラップ対策用)</span>
+        }
+    }
+    --------------------------------------------------
+
+  <span style="font-weight:bold">＃ AutoConvertUtil.txt の設定</span>
+    この項目はAutoConvertSettingsのAutoConvertUtilタブと同様のものです。
+    --------------------------------------------------
+    {
+        "path": {
+            "output": "",                 <span style="color:steelblue">//出力パス</span>
+            "move": "",                   <span style="color:steelblue">//[任意] 移動パス(マクロ使用可) ("\エンコード済" など相対パスも可)</span>
+            "rplsinfo": "",               <span style="color:steelblue">//[任意] rplsinfo.exe へのパス</span>
+            "screname": ""                <span style="color:steelblue">//[任意] SCRename.vbs へのパス</span>
+        },
+        "settings": {
+            "move": false,                <span style="color:steelblue">//エンコード後移動するか</span>
+            "rplsinfo": false,            <span style="color:steelblue">//rplsinfoを使用するか</span>
+            "edcb": true,                 <span style="color:steelblue">//EDCBを使用するか</span>
+            "screname": false,            <span style="color:steelblue">//SCRenameを使用するか</span>
+            "ignoreErr": false,           <span style="color:steelblue">//エラーを無視して次のファイルを処理するか</span>
+            "autoRetry": false,           <span style="color:steelblue">//リトライ可能であれば自動リトライするか</span>
+            "replace": [
+                <span style="color:steelblue">//[任意] タイトルの置換</span>
+                <span style="color:steelblue">//[置換前, 置換後]で設定</span>
+                [
+                    "置換前",
+                    "置換後"
+                ]
+            ],
+            "ep": [
+                <span style="color:steelblue">//[任意] $ACnumber$の取得で使用する話数の設定</span>
+                <span style="color:steelblue">//[話数前, 話数後]で設定</span>
+                <span style="color:steelblue">//以下の例は、#～、第～話、第～回が当てはまる</span>
+                [
+                    "話数前",
+                    "話数後"
+                ],
+                [
+                    "#",
+                    ""
+                ],
+                [
+                    "第",
+                    "話"
+                ],
+                [
+                    "第",
+                    "回"
+                ]
+            ]
+        },
+        "param": {
+            "avs": "720p",                <span style="color:steelblue">//デフォルトのavsファイル</span>
+            "preset": "x264",             <span style="color:steelblue">//デフォルトのプリセット</span>
+            "cm": false,                  <span style="color:steelblue">//デフォルトのcmパラメータ</span>
+            "cut": false,                 <span style="color:steelblue">//デフォルトのcutパラメータ</span>
+            "tss": false,                 <span style="color:steelblue">//デフォルトのtssパラメータ</span>
+            "nv": false,                  <span style="color:steelblue">//デフォルトのnvパラメータ</span>
+            "t2a": false,                 <span style="color:steelblue">//デフォルトのt2aパラメータ</span>
+            "cs": false,                  <span style="color:steelblue">//デフォルトのcsパラメータ</span>
+            "lg": false,                  <span style="color:steelblue">//デフォルトのlgパラメータ</span>
+            "jls": false,                 <span style="color:steelblue">//デフォルトのjlsパラメータ</span>
+            "apm": false,                 <span style="color:steelblue">//デフォルトのapmパラメータ</span>
+            "av": false,                  <span style="color:steelblue">//デフォルトのavパラメータ</span>
+            "faw": false,                 <span style="color:steelblue">//デフォルトのfawパラメータ</span>
+        },
+        "name": {
+            "file": {
+                "normal": "",
+                    <span style="color:steelblue">//[任意] 標準時 出力ファイル名(マクロ使用可)</span>
+                "rplsinfo": "$ACtitle2$( 第$ACnumber$話)( 「$ACsubtitle$」)",
+                    <span style="color:steelblue">//[任意] rplsinfo使用時 出力ファイル名(マクロ使用可)</span>
+                "edcb": "$ACtitle2$( 第$ACnumber$話)( 「$ACsubtitle$」)",
+                    <span style="color:steelblue">//[任意] EDCBのprogram.txt使用時 出力ファイル名(マクロ使用可)</span>
+                "screname": "$SCtitle$ 第$SCnumber$話 「$SCsubtitle$」"
+                    <span style="color:steelblue">//[任意] SCRename使用時 出力ファイル名(SCRenameの形式で記述)</span>
+            },
+            "dir": {
+                "dir": "$SDYYYY$年$SDM$月",
+                    <span style="color:steelblue">//デフォルトの出力ディレクトリ名(マクロ使用可)</span>
+                "normal": "$Program$",
+                    <span style="color:steelblue">//[任意] 標準時 出力ディレクトリ名(マクロ使用可)</span>
+                "rplsinfo": "$ACtitle2$",
+                    <span style="color:steelblue">//[任意] rplsinfo使用時 出力ディレクトリ名(マクロ使用可)</span>
+                "edcb": "$ACtitle2$",
+                    <span style="color:steelblue">//[任意] EDCBのprogram.txt使用時 出力ディレクトリ名(マクロ使用可)</span>
+                "screname": "$SCtitle$"
+                    <span style="color:steelblue">//[任意] SCRename使用時 出力ディレクトリ名(SCRenameの形式で記述)</span>
+            }
+            
+        }
+    }
+    --------------------------------------------------
+    <span style="font-weight:bold">＊</span> "param"(パラメータ) については、上記の"パラメータについて"を参照してください。
+    <span style="font-weight:bold">＊</span> 出力ファイルは "出力パス\出力ディレクトリ名\出力ファイル名.拡張子" となります。
+    <span style="font-weight:bold">＊</span> 出力ディレクトリは\で区切っても使用出来ます。
+       (例: $Service$\$Program$)
+    <span style="font-weight:bold">＊</span> マクロ使用可のところは以下のマクロが使えます。
+       基本的にEpgTimerのマクロの一部です。
+       使用できないマクロについては空文字になります。
+       また、複数存在するものはカンマ区切りになります。
+       なおEDCBがついたものはts.program.txtからの取得のみになります。
+
+      %Program%         番組名
+      %Service%         サービス名
+
+      %Title%           番組名(予約一覧の番組名に表示されているもの)
+      %Title2%          番組名([]の括弧でくくられている部分を削除したもの)
+      %SDYYYY%          開始日の年4桁固定
+      %SDYY%            開始日の年2桁固定
+      %SDMM%            開始日の月2桁固定
+      %SDM%             開始日の月
+      %SDDD%            開始日の日2桁固定
+      %SDD%             開始日の日
+      %SDW%             開始日の曜日
+      %STHH%            開始時間の時2桁固定
+      %STH%             開始時間の時
+      %STMM%            開始時間の分2桁固定
+      %STM%             開始時間の分
+
+      %EDYYYY%          終了日の年4桁
+      %EDYY%            終了日の年2桁
+      %EDMM%            終了日の月2桁固定
+      %EDM%             終了日の月
+      %EDDD%            終了日の日2桁固定
+      %EDD%             終了日の日
+      %EDW%             終了日の曜日
+      %ETHH%            終了時間の時2桁固定
+      %ETH%             終了時間の時
+      %ETMM%            終了時間の分2桁固定
+      %ETM%             終了時間の分
+
+      $ONID10           OriginalNetworkID 10進数(EDCB)
+      $TSID10$          TransportStreamID 10進数(EDCB)
+      $SID10$           ServiceID 10進数(EDCB)
+      $EID10$           EventID 10進数(EDCB)
+      $ONID16$          OriginalNetworkID 16進数(EDCB)
+      $TSID16$          TransportStreamID 16進数(EDCB)
+      $SID16$           ServiceID 16進数(EDCB)
+      $EID16$           EventID 16進数(EDCB)
+
+      %ServiceName%     サービス名(ファイル名に含まれている場合も取得可能)
+
+      これ以降の10進数、16進数はARIB-STD-B10を参照してください。
+
+      $Genre$           番組のジャンル
+      $Genre2$          番組の詳細ジャンル
+      $Genre10$         番組のジャンル 10進数
+      $Genre210$        番組の詳細ジャンル 10進数
+      $Genre16$         番組のジャンル 16進数
+      $Genre216$        番組の詳細ジャンル 16進数
+
+      $SubTitle$        サブタイトル(番組内容)(EDCB)
+      $SubTitle2$       $SubTitle$の内容で「^[#＃第][0-9０１２３４５６７８９]」の検索にヒットした場合のみ(EDCB)
+      
+      $Video$           映像種別("1080i(1125i)、アスペクト比16:9 パンベクトルなし"など)(EDCB)
+      $Audio$           音声種別("2/0モード（ステレオ）"など)(EDCB)
+      $Lang$            二ヶ国語放送などでの言語("英語"など)(EDCB)
+      $SamplingRate$    サンプリングレート("48kHz"など)(EDCB)
+      $FreeCA$          free_CA_modeの有無("有料放送"など)(EDCB)
+      $Video10$         映像種別 10進数(EDCB)
+      $Audio10$         音声種別 10進数(EDCB)
+      $SamplingRate10$  サンプリングレート 10進数(EDCB)
+      $FreeCA10$        free_CA_mode 10進数(EDCB)
+      $Video16$         映像種別 16進数(EDCB)
+      $Audio16$         音声種別 16進数(EDCB)
+      $SamplingRate16$  サンプリングレート 16進数(EDCB)
+      $FreeCA16$        free_CA_mode 16進数(EDCB)
+
+       また、番組名や番組内容から取得出来れば以下のマクロも使用可能です。
+       (それぞれ英数字記号は半角に変換されています)
+
+      $ACtitle$         番組名(タイトルだけ抜き出したもの)
+      $ACtitle2$        番組名(括弧でくくられている部分を削除したもの)
+      $ACsubtitle$      サブタイトル(「」でくくられている部分を抜き出したもの)
+      $ACpart$          「前編」「中編」「後編」のいずれか
+      $ACnumber$        $SCnumber2$と同じ
+      $ACnumber1$       話数（1桁以上）
+      $ACnumber2$       話数（2桁以上）
+      $ACnumber3$       話数（3桁以上）
+      $ACnumber4$       話数（4桁以上）
+
+      マクロは () で囲むと、<span style="font-weight:bold">その括弧内のマクロが空文字だった場合に、
+      括弧内をまるごと消去出来るようになっています。</span>
+      この仕様のため、<span style="font-weight:bold"> () をそのまま記述したい場合は、\( 、 \) とエスケープしてください。</span>
+      
+      例: $ACtitle2$( 第$ACnumber$話) 「$ACsubtitle$」
+          $ACnumber$が存在する場合 → タイトル 第01話 「サブタイトル」
+          $ACnumber$が存在するしない場合 → タイトル 「サブタイトル」
+
+
+  <span style="font-weight:bold">＃ Service.txt と Program.txt の設定</span>
+    この項目はAutoConvertSettingsの詳細設定タブのサービス、番組と同様のものです。
+    --------------------------------------------------
+    [
+        {
+            "name": "機動戦士ガンダムAGE",
+                <span style="color:steelblue">//タイトルから検索する名前</span>
+            "program": "ガンダムAGE",
+                <span style="color:steelblue">//番組名</span>
+            "file": "ガンダムAGE 第$ACnumber$話",
+                <span style="color:steelblue">//ファイル名 [任意]</span>
+            "dir": "ガンダムAGE",
+                <span style="color:steelblue">//ディレクトリ名 [任意]</span>
+            "param": {
+                "preset": "x264"
+            },
+            "level": {
+                "preset": 1
+            }
+        },
+        {
+            "name": "機動戦士ガンダムSEED",
+            "program": "ガンダムSEED",
+            "param": {
+                "avs": "720p",
+                "preset": "x264_low"
+            },
+            "level": {
+                "avs": 1,
+                "preset": 1
+            }
+        },
+        {
+            "name": "HDリマスター",
+            "program": "",
+            "param": {
+                "avs": "1080p",
+                "preset": "x264"
+            },
+            "level": {
+                "avs": 2,
+                "preset": 1
+            }
+        }
+    ]
+    --------------------------------------------------
+    Service.txt はサービス名から、Program.txt はタイトルから、
+    "name" に当てはまるものを検索し、パラメータを決定できます。
+    また、複数当てはまる場合はレベルの高いほうが優先され、
+    レベルが同じ場合は上の方が優先されます。
+    デフォルト設定のレベルは0ですのでレベルは1以上を指定してください。
+
+    <span style="font-weight:bold">＊</span> 上記タイトル例 :
+        "機動戦士ガンダムSEED 37 PHASE-39「アスラン」"
+                  … "機動戦士ガンダムSEED"に当てはまり、
+                     番組名は"ガンダムSEED"、avsは"720p"、プリセットは"x264_low"となる。
+        "機動戦士ガンダムAGE  第49話「長き旅の終わり」"
+                  … "機動戦士ガンダムAGE"に当てはまり、
+                     番組名は"ガンダムAGE"、avsには記述がないのでデフォルト設定、プリセットは"x264"となる。
+                     また、ファイル名は"ガンダムAGE 第49話"、ディレクトリ名は"ガンダムAGE"となる。
+        "機動戦士ガンダムSEED HDリマスターセレクション  PHASE-01「偽りの平和」" 
+                  … "機動戦士ガンダムSEED"と"HDリマスター"に当てはまり、
+                     番組名は上が優先され"ガンダムSEED"、avsはレベルが2の下が優先され"1080p"、
+                     プリセットは同じレベル1のため、上が優先され"x264_low"となる。
+
+  <span style="font-weight:bold">＃ Other.txt の設定</span>
+    この項目はAutoConvertSettingsの詳細設定タブのその他と同様のものです。
+    --------------------------------------------------
+    [
+        {
+            "search": "$Genre$",
+                <span style="color:steelblue">//マクロ</span>
+            "target": [
+                {
+                    "name": "アニメ",
+                        <span style="color:steelblue">//マクロから検索する名前</span>
+                    "param": {
+                        "av": true
+                    },
+                    "level": {
+                        "av": 1
+                    }
+                },
+                {
+                    "name": "ドラマ",
+                    "param": {
+                        "avs": "1080p"
+                    },
+                    "level": {
+                        "avs": 1
+                    }
+                }
+            ]
+        },
+        {
+            "search": "$ACnumber$",
+            "target": [
+                {
+                    "name": "01",
+                    "param": {
+                        "avs": "720p"
+                    },
+                    "level": {
+                        "avs": 1
+                    }
+                }
+            ]
+        }
+    ]
+    --------------------------------------------------
+    $Program$と$Service$以外のマクロを使用してパラメータを決定できます。
+    基本的に Service.txt と Program.txt と似ているため構造は割愛します。
+    なお、上記の例では、
+    ジャンルがアニメだった場合、AutoVfrになり、
+    ジャンルがドラマだった場合、avsが"1080p"となります。
+    また、話数が01だった場合、avsが"720p"となります。
+
+  <span style="font-weight:bold">＃ Presetフォルダの avsファイルについて</span>
+    <span style="font-weight:bold">＊</span> サンプルのようなものですので環境に合わせて変更してみてください
+    <span style="font-weight:bold">＊</span> __opt__ はnv, t2a, cm, faw, alt, program, serviceのパラメータに置換されます
+       AutoConvertUtilは acu.avs として出力し、AutoConvertに渡しています
+       これによりある程度avs側で処理ができるようになっています
+    <span style="font-weight:bold">＊</span> __ac__ はAutoConvertフォルダへのパスに置換されます
+    <span style="font-weight:bold">＊</span> __trim__ はTrim情報に置換されます
+    <span style="font-weight:bold">＊</span> __def__ はItsのdefファイルに置換されます
+    <span style="font-weight:bold">＊</span> __tmc__ はタイムコード出力先に置換されます
+       また、Service.txt と Program.txt によってパラメータを追加することができます
+    <span style="font-weight:bold">＊</span> AutoVfrに使用するavsは、__vfr__ は動画情報の出力先に置換されます
+
+  <span style="font-weight:bold">＃ Presetフォルダの txt(プリセット)ファイルについて</span>
+    この項目はAutoConvertSettingsの詳細設定タブのプリセットと同様のものです。
+    --------------------------------------------------
+    {
+        "type": 0,                    <span style="color:steelblue">//エンコーダーのタイプ(0: x264, 1: H.264出力 2: その他)</span>
+        "ext": "mp4",                 <span style="color:steelblue">//拡張子</span>
+        "enc": "C:\\TV\\x264\\x264.exe",
+            <span style="color:steelblue">//エンコーダへのフルパス</span>
+        "opt": "&lt;video&gt; --demuxer y4m --crf 20 ……… --aq-strength 0.6 -o &lt;output&gt;"
+            <span style="color:steelblue">//エンコーダのオプション</span>
+    }
+    --------------------------------------------------
+    <span style="font-weight:bold">＊</span> サンプルのようなものですので環境に合わせて変更してみてください
+    <span style="font-weight:bold">＊</span> オプション(opt) は &lt;video&gt;, &lt;audio&gt;, &lt;output&gt;が利用できます。
+       それぞれ 入力(y4m映像), 入力(wav音声)(エンコーダのタイプがその他のみ使用可), 出力に対応しています
+       <span style="color:steelblue">(例: FFMpegの場合 → -i &lt;video&gt; -i &lt;audio&gt; ……… &lt;output&gt;)</span>
+
+  <span style="font-weight:bold">＃ Presetフォルダの Logoフォルダについて</span>
+    <span style="font-weight:bold">＊</span> 透過性ロゴフィルタで使用するロゴデータ(ldgファイル)を サービス名.lgd で保存してください
+       また、logoGuilloで使用する サービス名.lgd.autoTune.paramや、
+       comskipの サービス名.logo.txt、サービス名.iniもこのフォルダに入れてください。
+       サービス名はService.txtで指定してください。
+
+<span style="font-weight:bold;font-size:large">○ 使用方法</span>
+  <span style="font-weight:bold">＃ AutoConvertUtil.bat (通常)</span>
+    TSファイルをドラッグアンドドロップしてください。
+    
+  <span style="font-weight:bold">＃ AutoConvertGUI.bat (GUI)</span>
+    バッチファイルにドラッグアンドドロップするか、「追加」ボタンで
+    TSファイルを追加してください。(リストにTSファイルを
+    ドラッグアンドドロップしても追加できますが、恐らくVisualStudioが必要です)
+    パラメータを調整後、開始ボタンで処理が始まります。
+    
+  <span style="font-weight:bold">＃ AutoConvertSettings.bat (設定)</span>
+    起動して、設定を変更後、保存ボタンまたは名前を付けて保存ボタン(プリセットのみ)で
+    設定を保存出来ます。
+
+  <span style="font-weight:bold">＃ AutoConvert.bat (引数を指定して実行)</span>
+    "AutoConvert.bat 引数" で呼び出してください。
+
+    <span style="font-weight:bold">＊</span> 引数
+      -i input.ts   入力TSファイル
+      -o output     出力ファイル名
+      -a avs        avsファイル (フルパス)
+      -p preset     プリセットファイル (フルパス)
+      -cm           CMカットのみ
+      -cut          TSカットのみ
+      -tss          TsSplitter使用
+      -nv           DGDecNV使用
+      -t2a          ts2aac使用
+      -cs           comskip使用
+      -lg           logoGuillo使用
+      -jls          join_logo_scp使用
+      -c2a          Caption2Ass使用
+      -apm          AvsPmod使用
+      -av           AutoVfr使用
+      -faw          FakeAacWav使用
+
+  <span style="font-weight:bold">＃ AutoConvert.js, AutoConvertUtil.js (血迷った人向き)</span>
+    new AutoConvert() や new AutoConvertUtil() でインスタンスが作れるはず。
+    WScriptから直接Arguments取得してるからそこら辺はオーバーライドとかしてね。
+
+<span style="font-weight:bold;font-size:large">○ ヒント</span>
+  <span style="font-weight:bold">＊</span> CMカットではcomskipが出力した"ファイル名.ts.avs"に含まれるTrim情報を取得しています。
+     事前にTrim情報を"ファイル名.ts.avs"に記述することで、CMカットを行うことができます。
+     apmパラメータはこの方法でCMカットを行なっています。
+     また、"ファイル名.ts.avs"にTrim情報がある場合、cmパラメータが指定されている場合を除き、
+     comskip、logoGuillo、join_logo_scpはスキップされます。
+     例: DGIndexでd2vファイルを作成し(tsを直接読み込むとズレが生じるため)、Aviutl読み込んでCMカットしたあと、
+         Trimエクスポートプラグインでカット情報を取得、"ファイル名.ts.avs"に貼り付けて保存など。
+  <span style="font-weight:bold">＊</span> 逆テレシネやBob化をしたい場合は、avsファイルの Deint_(last) を
+     IVTC_(last) (逆テレシネ)や Bob_(last)（Bob化）に変えることによって、かんたんに出来るようになってます。
+     また、720p_ivtc, 720p_bob などがはじめから用意されているのでそれを指定するのも手だと思います。
+     ただし、逆テレシネは TIVTC.dll を必要とします。
+  <span style="font-weight:bold">＊</span> サービス名は、ファイル名、ts.program.txtのサービス名、rplsinfoのサービス名からService.txtの
+     nameに当てはまるserviceになります。サービス名はロゴデータを参照する際に必要になりますので、
+     Service.txtに載ってない局は適宜追加し、ファイル名にサービス名が無いかつts.program.txtがない場合は、
+     rplsinfoを導入することをおすすめします。
+  <span style="font-weight:bold">＊</span> AutoConvertUtilはDGIndexNV、ts2aac、comskip、logoGuillo、join_logo_scp、AutoVfr、FAWのいずれで失敗した場合、
+     それを使用しないでリトライすることができます。
+     設定の AutoConvert -&gt; 設定 -&gt; autoRetry をチェックしておくと、自動リトライできます。
+  <span style="font-weight:bold">＊</span> AutoConvertは各パートで失敗した場合、設定の AutoConvert -&gt; 設定 -&gt; failurepause が設定している場合、
+     そのパートをリトライすることができます。avsファイルの調整時などに便利です。
+
+<span style="font-weight:bold;font-size:large">○ 注意事項</span>
+  <span style="font-weight:bold">＊</span> このバッチファイルを使用した結果発生したいかなる損害も作者は責任を負うことはできません。
+  <span style="font-weight:bold">＊</span> 不具合等がありましたら作者HPまたは@rndomhackまで御連絡ください。
+  <span style="font-weight:bold">＊</span> 再配布、改変などはお好きにどうぞ。
+
+<span style="font-weight:bold;font-size:large">○ 更新履歴</span>
+  ver 2.3.0     ・ダイアログの生成に使うdlgHelper.jsを追加(JScript.net)
+                ・ADODB.Streamで読み書きできるようにactivexHelper.wscを追加
+                ・TSファイルの移動時に同じ名前のファイルを移動するように変更
+                ・バグ修正
+  ver 2.2.2     ・ファイル名とディレクトリ名を直接指定できるように変更
+                ・TSファイルをエンコード後移動できるように変更
+  ver 2.2.1     ・Vfr時のタイムコードmuxををtc2mp4Modに変更
+                ・Caption2Assを使用して字幕処理をするc2aパラメータの追加
+                ・バグ修正
+  ver 2.2.0     ・AutoConvertSettingsとAutoConvertGUIを追加
+                ・設定ファイル、プリセットファイルの形式変更
+                ・上記変更によりextパラメータ、altパラメータを削除
+                ・cmパラメータ、apmパラメータの追加
+                ・上記変更でのAutoConvert本体への機能統合に伴うCMCutAssistの削除
+  ver 2.1.0     ・rplsinfoを使用して情報を取得できるように設定を追加
+                ・join_logo_scpを使用できるjlsパラメータを追加
+                ・マクロを使用してパラメータを決定できるOther.txtを追加
+  ver 2.0.3     ・TS結合をTsTimeKeeperからTsConnectorに変更
+                ・Trim最小フレームの設定を追加
+                ・CMCutAssistでカット補助としてcomskipを事前に走らせるように変更
+  ver 2.0.2     ・PIDを取得する際Total値が大きい方を優先するように変更
+  ver 2.0.1     ・errファイルが存在した場合PIDを取得するように変更
+  ver 2.0.0     ・全面変更
+  ver 1.1.5     ・avsファイルを更新(MT関数使わないように変更)
+  ver 1.1.4     ・括弧等を含むファイル名が処理できない不具合を修正
+                ・Trim情報を__trim__と置換するように変更
+  ver 1.1.3     ・CMカット支援バッチ(CMAssist.bat)を追加
+                ・MT.dllがあった際に自動的にMT関数を使うように変更
+                ・上記によりDGDecodeMT_関数の廃止
+                ・ファイルチェックを更に正確に行うように設定
+  ver 1.1.2     ・細かい不具合を修正
+  ver 1.1.1     ・ファイルチェックを正確に行うように設定
+                ・FileCheck.bat変更(ログ追加など)
+                ・AutoConvertの引数変更
+                ・program.csvとservice.csvの列順番変更
+                ・デバッグ設定の追加
+                ・ファイルチェック有無の追加
+  ver 1.1.0     ・MediaCoderを廃止し、代わりにFFmpegを導入
+                ・ts2aacを導入
+                ・ignore_errorのパターンを4種類に変更
+                ・標準で透過性ロゴフィルタを使用できるようにavsを変更
+                ・replace.txtを追加
+  ver 1.0.3     ・Readmeに書いている方法で動かないという重大なミスを修正
+  ver 1.0.2     ・いくつかの不具合を修正
+                ・Readmeに説明を補足・ヒントを追加
+                ・FileCheck.batを追加
+  ver 1.0.1     ・"("と")"が含まれると処理ができない不具合を修正
+  ver 1.0.0     ・初版
+</pre>
+</body>
+</html>

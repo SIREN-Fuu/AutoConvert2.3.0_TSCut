@@ -1,0 +1,6 @@
+{
+    "type": 0,
+    "ext": "mp4",
+    "enc": "x264.exe‚Ö‚ÌƒpƒX",
+    "opt": "<video> --demuxer y4m --crf 20 --profile high --8x8dct --partitions all --bframes 6 --b-adapt 2 --ref 6 --me umh --subme 7 --merange 24 --direct auto --non-deterministic --aq-strength 0.6 --sar 4:3 -o <output>"
+}

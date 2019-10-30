@@ -1,0 +1,77 @@
+[
+    {
+        "search": "設定例",
+        "target": [
+            {
+                "name": "avs 720p, preset x264, t2a av fawをオン, cs lg jlsをオフ",
+                "program": "番組名に設定する文字列",
+                "file": "ファイル名として設定する文字列",
+                "dir": "ディレクトリ名として設定する文字列",
+                "param": {
+                    "avs": "720p",
+                    "preset": "x264",
+                    "av": true,
+                    "faw": true,
+                    "t2a": true,
+                    "cs": false,
+                    "lg": false,
+                    "jls": false
+                },
+                "level": {
+                    "avs": 1,
+                    "preset": 1,
+                    "av": 1,
+                    "faw": 1,
+                    "t2a": 1,
+                    "cs": 1,
+                    "lg": 1,
+                    "jls": 1
+                }
+            }
+        ]
+    },
+    {
+        "search": "$Genre$",
+        "target": [
+            {
+                "name": "ニュース／報道"
+            },
+            {
+                "name": "スポーツ"
+            },
+            {
+                "name": "情報／ワイドショー"
+            },
+            {
+                "name": "ドラマ"
+            },
+            {
+                "name": "音楽"
+            },
+            {
+                "name": "バラエティ"
+            },
+            {
+                "name": "映画"
+            },
+            {
+                "name": "アニメ／特撮"
+            },
+            {
+                "name": "ドキュメンタリー／教養"
+            },
+            {
+                "name": "劇場／公演"
+            },
+            {
+                "name": "趣味／教育"
+            },
+            {
+                "name": "福祉"
+            },
+            {
+                "name": "その他"
+            }
+        ]
+    }
+]

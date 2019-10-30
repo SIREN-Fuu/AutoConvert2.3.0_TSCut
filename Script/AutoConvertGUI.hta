@@ -1,0 +1,260 @@
+<html>
+  <head>
+    <title>AutoConvert</title>
+    <hta:application
+      id="oAutoConvert"
+      applicationName="AutoConvertGUI"
+      border="thin"
+      innerBorder="no"
+      maximizeButton="no"
+      scroll="no"
+      selection="no"
+      version="2.2.0"
+    />
+    <meta http-equiv="MSThemeCompatible" content="yes">
+    <style type="text/css">
+      body {
+        background: #f0f0f0;
+      }
+      input, select, textarea {
+        width: 100%;
+      }
+      .main {
+        width: 100%;
+        font-size: 14px;
+        text-align: center;
+        overflow: hidden;
+      }
+      .container {
+        width: 646px;
+        margin: 0 auto;
+        text-align: left;
+        overflow: hidden;
+      }
+      .box1, .box2, .box3, .box4, .box5, .box6, .box7, .box8, .box9, .box10, .box11, .box12, .param1, .param2, .param3 {
+        float: left;
+        display: inline;
+        margin-left: 4px;
+        margin-bottom: 4px;
+      }
+      .box1 { width: 50px; }
+      .box2 { width: 104px; }
+      .box3 { width: 158px; }
+      .box4 { width: 212px; }
+      .box5 { width: 266px; }
+      .box6 { width: 320px; }
+      .box7 { width: 374px; }
+      .box8 { width: 428px; }
+      .box9 { width: 482px; }
+      .box10 { width: 536px; }
+      .box11 { width: 590px; }
+      .box12 { width: 644px; }
+      .param1 { width: 20px; }
+      .param2 { width: 30px; }
+      .param3 { width: 100px; }
+      .first {
+        margin-left: 0;
+        clear: left;
+      }
+      .parent {
+        padding-top: 0;
+        border-top: 0;
+      }
+      .clearfix:after {
+        visibility: hidden;
+        display: block;
+        font-size: 0;
+        content: " ";
+        clear: both;
+        height: 0;
+      }
+      .mark {
+        width:100%;
+        font-size: 18px;
+        margin:0 auto;
+        text-align: center;
+      }
+      * html .clearfix { zoom: 1; }
+      *:first-child+html .clearfix { zoom: 1; } 
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <div class="container">
+        <div class="box12 first">入力ファイル</div>
+        <div class="box12 first"><input id="info_input" type="text" readonly /></div>
+        
+        <div class="box12 first">出力ファイル</div>
+        <div class="box6 first"><input id="info_output" type="text" title="出力パス" /></div>
+        <div class="box6"><input id="info_dir" type="text" title="出力ディレクトリ" /></div>
+        <div class="box12 first"><input id="info_name" type="text" title="出力ファイル名" /></div>
+        
+        <div class="box6 first parent">
+          <div class="box6 first">avsファイル</div>
+          <div class="box6 first">
+            <select id="param_avs" class="box6 first">
+            </select>
+          </div>
+        </div>
+        
+        <div class="box6 parent">
+          <div class="box6 first">プリセットファイル</div>
+          <div class="box6 first">
+            <select id="param_preset" class="box6 first">
+            </select>
+          </div>
+        </div>
+        
+        <div class="box4 first parent">
+          <div class="box4 first">サービス名</div>
+          <div class="box3 first">
+            <select id="detected_service" class="box3 first">
+              <option value="-1"> - </option>
+            </select>
+          </div>
+          <div class="box1"><input id="detected_service_apply" type="button" value="再適用" /></div>
+        </div>
+        
+        <div class="box4 parent">
+          <div class="box4 first">番組名</div>
+          <div class="box3 first">
+            <select id="detected_program" class="box3 first">
+              <option value="-1"> - </option>
+            </select>
+          </div>
+          <div class="box1"><input id="detected_program_apply" type="button" value="再適用" /></div>
+        </div>
+        
+        <div class="box4 parent">
+          <div class="box4 first">その他</div>
+          <div class="box3 first">
+            <select id="detected_other" class="box3 first">
+              <option value="-1,-1"> - </option>
+            </select>
+          </div>
+          <div class="box1"><input id="detected_other_apply" type="button" value="再適用" /></div>
+        </div>
+        
+        <div class="box12 first">パラメータ</div>
+        <div class="box4 first parent">
+          <div class="param1 first"><input id="param_cm" type="checkbox" /></div>
+          <div class="param2">cm</div>
+          <div class="param3" title="CMカット(cs, lg, jls, apm)のみを行います">
+            CMカットのみ
+          </div>
+        </div>
+        <div class="box4 parent">
+          <div class="param1 first"><input id="param_cut" type="checkbox" /></div>
+          <div class="param2">cut</div>
+          <div class="param3" title="エンコードせずにTSのままカットして保存します">
+            TSカットのみ
+          </div>
+        </div>
+        <div class="box4 parent">
+          <div class="param1 first"><input id="param_tss" type="checkbox" /></div>
+          <div class="param2">tss</div>
+          <div class="param3" title="事前にTSSplitterを使用します">
+            TSSplitter
+          </div>
+        </div>
+        <div class="box4 first parent">
+          <div class="param1 first"><input id="param_nv" type="checkbox" /></div>
+          <div class="param2">nv</div>
+          <div class="param3" title="DGIndexを使用してTSを読み込みます">
+            DGIndexNV
+          </div>
+        </div>
+        <div class="box4 parent">
+          <div class="param1 first"><input id="param_t2a" type="checkbox" /></div>
+          <div class="param2">t2a</div>
+          <div class="param3" title="ts2aacを使用してTSからaacを分離します">
+            ts2aac
+          </div>
+        </div>
+        <div class="box4 parent">
+          <div class="param1 first"><input id="param_cs" type="checkbox" /></div>
+          <div class="param2">cs</div>
+          <div class="param3" title="comskipを使用して自動CMカットを行います">
+            comskip
+          </div>
+        </div>
+        <div class="box4 first parent">
+          <div class="param1 first"><input id="param_lg" type="checkbox" /></div>
+          <div class="param2">lg</div>
+          <div class="param3" title="logoGuilloを使用して自動CMカットを行います">
+            logoGuillo
+          </div>
+        </div>
+        <div class="box4 parent">
+          <div class="param1 first"><input id="param_jls" type="checkbox" /></div>
+          <div class="param2">jls</div>
+          <div class="param3" title="joinlogoscpを使用して自動CMカットを行います">
+            joinlogoscp
+          </div>
+        </div>
+        <div class="box4 parent">
+          <div class="param1 first"><input id="param_apm" type="checkbox" /></div>
+          <div class="param2">apm</div>
+          <div class="param3" title="AvsPmodを使用して手動でカット編集します">
+            AvsPmod
+          </div>
+        </div>
+        <div class="box4 first parent">
+          <div class="param1 first"><input id="param_c2a" type="checkbox" /></div>
+          <div class="param2">c2a</div>
+          <div class="param3" title="Caption2Assを使用して字幕の処理を行います">
+            Caption2Ass
+          </div>
+        </div>
+        <div class="box4 parent">
+          <div class="param1 first"><input id="param_av" type="checkbox" /></div>
+          <div class="param2">av</div>
+          <div class="param3" title="AutoVfrを使用して可変フレームレートの処理を行います">
+            AutoVfr
+          </div>
+        </div>
+        <div class="box4 parent">
+          <div class="param1 first"><input id="param_faw" type="checkbox" /></div>
+          <div class="param2">faw</div>
+          <div class="param3" title="FakeAacWavを使用して無劣化でaacを使用します">
+            FakeAacWav
+          </div>
+        </div>
+        
+        <div class="box12 first">リスト</div>
+        <div class="box10 first">
+          <select id="list" size="6" class="box10 first">
+          </select>
+          <object id="objOLEDragDrop" classid="CLSID:8E3867A3-8586-11D1-B16A-00C0F0283628" style="width:100%;height:105px;display:none;">
+            <param name="OLEDropMode" value="1" />
+            <param name="Style" value="1" />
+            <param name="Simpletext" value="Drop TS Files Here." />
+          </object>
+        </div>
+        <div class="box2 parent">
+          <div class="box2 first"><input id="list_add" type="button" value="追加" /></div>
+          <div class="box2 first"><input id="list_delete" type="button" value="削除" /></div>
+          <div class="box2 first"><input id="list_up" type="button" value="↑" /></div>
+          <div class="box2 first"><input id="list_down" type="button" value="↓" /></div>
+        </div>
+        
+        <div class="box12 first">出力</div>
+        <div class="box12 first">
+          <textarea id="stdout" class="output" rows="6" readonly></textarea>
+        </div>
+        
+        <div class="box2 first"><div class="param1 first"><input id="display_time" type="checkbox" checked /></div>経過時間</div>
+        <div class="box4"><div class="param1 first"><input id="delete_success" type="checkbox" checked /></div>処理完了後リストから削除</div>
+        <div class="box2"><input id="start" type="button" value="開始" /></div>
+        <div class="box2"><input id="abort" type="button" value="中止" disabled /></div>
+        <div class="box2"><input id="close" type="button" value="閉じる" /></div>
+      </div>
+    </div>
+    <object id="objHtmlDlgHelper" classid="CLSID:3050f4e1-98b5-11cf-bb82-00aa00bdce0b"></object>
+    <script type="text/javascript" src="AutoConvertLibrary.js"></script>
+    <script type="text/javascript" src="AutoConvertDefine.js"></script>
+    <script type="text/javascript" src="AutoConvertUtil.js"></script>
+    <script type="text/javascript" src="AutoConvertHta.js"></script>
+    <script type="text/javascript" src="AutoConvertGUI.js"></script>
+  </body>
+</html>

@@ -1,0 +1,63 @@
+バージョンごとの変更方法です
+更新履歴はReadmeをご覧ください
+
+  ver 2.2.2 → ver 2.3.0
+    Scriptフォルダ上書き
+
+  ver 2.2.1 → ver 2.2.2
+    Scriptフォルダ上書き
+    設定 -> AutoConvertUtil
+      パス -> 移動パス を追加
+      設定 -> move を追加
+    設定 -> 詳細設定
+      リスト -> ファイル名として設定する文字列(任意) を追加
+      リスト -> ディレクトリ名として設定する文字列(任意) を追加
+
+  ver 2.2.0 → ver 2.2.1
+    Scriptフォルダ上書き
+    c2a(Caption2Ass)パラメータを追加
+    設定 -> AutoConvert
+      パス -> tc2mp4Mod を追加
+
+  ver 2.1.0 → ver 2.2.0
+    Avisynthフォルダ、Logoフォルダ以外全て削除、追加
+    設定ファイル、プリセットの形式も変更されているため新たに設定し直す必要あり
+    今回追加されたAutoConvertSettingsから設定が変更可能
+    特にプリセットにエンコーダへのパスを
+    記入するように変更されているため注意が必要
+    ドラッグアンドドロップはAutoConvertUtil.batへ
+
+  ver 2.0.3 → ver 2.1.0
+    Scriptフォルダ上書き
+    Settings\Other.txt を追加
+    AutoConvert.txt
+      path -> logoframe を追加
+      path -> chapterexe を追加
+      path -> joinlogoscp を追加
+      path -> jlsavs を追加
+      path -> jlscmd を追加
+      settings -> logoframe を追加
+      settings -> chapterexe を追加
+      settings -> joinlogoscp を追加
+    AutoConvertUtil.txt
+      path -> rplsinfo を追加
+      settings -> rplsinfo を追加
+      param -> jls を追加
+      name -> file -> rplsinfo を追加
+      name -> dir -> rplsinfo を追加
+
+  ver 2.0.2 → ver 2.0.3
+    Scriptフォルダ上書き
+    AutoConvert.txt
+      path -> tstimekeeper を tsconnector に変更
+      settings -> mintrim を追加
+      settings -> tssconnect を追加
+    CMCutAssist.txt
+      path -> comskip を追加
+      path -> comskipini を追加
+
+  ver 2.0.1 → ver 2.0.2
+    Scriptフォルダ上書き
+
+  ver 2.0.0 → ver 2.0.1
+    Scriptフォルダ上書き

@@ -1,0 +1,146 @@
+[
+    {
+        "name": "設定例（avs 720p, preset x264, t2a av fawをオン, cs lg jlsをオフ）",
+        "service": "サービス名に設定する文字列",
+        "file": "ファイル名として設定する文字列",
+        "dir": "ディレクトリ名として設定する文字列",
+        "param": {
+            "avs": "720p",
+            "preset": "x264",
+            "av": true,
+            "faw": true,
+            "t2a": true,
+            "cs": false,
+            "lg": false,
+            "jls": false
+        },
+        "level": {
+            "avs": 1,
+            "preset": 1,
+            "av": 1,
+            "faw": 1,
+            "t2a": 1,
+            "cs": 1,
+            "lg": 1,
+            "jls": 1
+        }
+    },
+    {
+        "name": "ＢＳ朝日",
+        "service": "BS朝日"
+    },
+    {
+        "name": "ＢＳ－ＴＢＳ",
+        "service": "BS-TBS"
+    },
+    {
+        "name": "ＢＳジャパン",
+        "service": "BSジャパン"
+    },
+    {
+        "name": "ＢＳ１１",
+        "service": "BS11"
+    },
+    {
+        "name": "ＴｗｅｌｌＶ",
+        "service": "TwellV"
+    },
+    {
+        "name": "ＢＳ日テレ",
+        "service": "BS日テレ"
+    },
+    {
+        "name": "ＢＳフジ",
+        "service": "BSフジ"
+    },
+    {
+        "name": "ＮＨＫＢＳ１",
+        "service": "NHKBS1"
+    },
+    {
+        "name": "ＮＨＫＢＳプレミアム",
+        "service": "NHKBSプレミアム"
+    },
+    {
+        "name": "ＮＨＫ総合",
+        "service": "NHK総合"
+    },
+    {
+        "name": "ＮＨＫＥテレ",
+        "service": "NHKEテレ"
+    },
+    {
+        "name": "日テレ",
+        "service": "日テレ"
+    },
+    {
+        "name": "テレビ朝日",
+        "service": "テレビ朝日"
+    },
+    {
+        "name": "ＴＢＳ",
+        "service": "TBS"
+    },
+    {
+        "name": "テレビ東京",
+        "service": "テレビ東京"
+    },
+    {
+        "name": "フジテレビ",
+        "service": "フジテレビ"
+    },
+    {
+        "name": "ＴＯＫＹＯ　ＭＸ",
+        "service": "TOKYOMX"
+    },
+    {
+        "name": "放送大学",
+        "service": "放送大学"
+    },
+    {
+        "name": "テレ玉",
+        "service": "テレ玉"
+    },
+    {
+        "name": "ｔｖｋ",
+        "service": "tvk"
+    },
+    {
+        "name": "チバテレビ",
+        "service": "チバテレビ"
+    },
+    {
+        "name": "ＭＢＳ毎日放送",
+        "service": "MBS毎日放送"
+    },
+    {
+        "name": "ＫＢＳ京都",
+        "service": "KBS京都"
+    },
+    {
+        "name": "ＡＢＣ",
+        "service": "ABCテレビ"
+    },
+    {
+        "name": "関西テレビ",
+        "service": "関西テレビ"
+    },
+    {
+        "name": "読売テレビ",
+        "service": "読売テレビ"
+    },
+    {
+        "name": "ＮＨＫ",
+        "service": "NHK",
+        "param": {
+            "cs": false,
+            "lg": false,
+            "jls": false
+        },
+        "level": {
+            "cs": 1,
+            "lg": 1,
+            "jls": 1
+        }
+    }
+]

@@ -1,0 +1,13 @@
+<?XML version="1.0"?>
+<package>\
+    <component id="activexHelper">
+        <public>
+            <method name="_ActiveXObject"/>
+        </public>
+        <script language="JScript">
+            function _ActiveXObject(name) {
+                return new ActiveXObject(name);
+            }
+        </script>
+    </component>
+</package>
