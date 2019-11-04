@@ -86,8 +86,6 @@ AutoConvert.prototype = {
                     }
                     if (this.param.cut) {
                         i = 10;
-                        //2019-08-27 23:53:24 SIREN_Fix 確認用
-                        //i = 15;
                         continue;
                     }
                     i++;
@@ -624,41 +622,6 @@ AutoConvert.prototype = {
         
         return true;
     },
-    getAacPF: function() {
-        //acLib.log(acLib.fso.GetFolder(acLib.fso.GetParentFolderName(this.args.input)), 0);
-        var objEnum = new Enumerator(acLib.fso.GetFolder(acLib.fso.GetParentFolderName(this.args.input)).Files);
-
-        //2019-09-06 01:30:16 SIREN_Fix 正規表現内に記号が入っているとaacファイルの検索が失敗する為に、特定文字をReplaceする
-        //var reg = new RegExp(acLib.fso.GetBaseName(this.args.input) + ".*\\.aac"); //初期コード
-        //記号Replace
-        var regString = acLib.fso.GetBaseName(this.args.input);
-        regString = regString.replace("+","\\+")
-        var reg = new RegExp(regString + ".*\\.aac");
-        //記号Replaceここまで
-        while (!objEnum.atEnd()) {
-            if (acLib.fso.GetFileName(objEnum.item()).match(reg)) {
-                var aac = String(objEnum.item());
-                //acLib.log(aac, 0);
-                var info = aac.split(/( |ms|\.)/);
-                for (var i = 0; i < info.length; i++) {
-                    if (info[i].match(/DELAY/i)) {
-                        var delay = info[i + 1];
-                        break;
-                    }
-                }
-                if (delay) break;
-            }
-            objEnum.moveNext();
-        }
-        if (!aac || !delay) {
-            acLib.log("aacファイルの情報を取得出来ませんでした", 1);
-            return false;
-        }
-        this.temp.aac = aac;
-        this.temp.delay = parseInt(delay);
-        
-        return true;
-    },
     ts2aac: function() {
         var param = "";
         if (this.temp.pid.video) param += " -v 0x" + this.temp.pid.video;
@@ -737,13 +700,9 @@ AutoConvert.prototype = {
     },
     logoguillo: function() {
         if (acLib.fso.FileExists(this.args.input + ".avs")) return true;
-        //2019-08-22 22:33:55 SIREN_Fix 多分if文条件分岐が間違っているのを修正 DGDecorderNVのことはまだ考慮していない
-        //この位置でのDGDecordeは、CM_Cutかどうか考慮する必要があるのではないだろうか？
-        //if (this.param.nv) {
-        if (!this.param.nv) {
-            //2019-08-22 22:35:28 SIREN_Fix dgindexの処理が終わったときに終了させるオプションが足りないのを修正
-            //var err = acLib.shell.Run("cmd /c \"\"" + this.path.dgindex + "\" -i \"" + this.args.input + "\" -o \"" + this.path.temp + "\" " + this.settings.dgindex + " -om 0\"", this.settings.window, true);
-            var err = acLib.shell.Run("cmd /c \"\"" + this.path.dgindex + "\" -i \"" + this.args.input + "\" -o \"" + this.path.temp + "\" " + this.settings.dgindex + " -om 0 -exit -minimize\"", this.settings.window, true);
+        
+        if (this.param.nv) {
+            var err = acLib.shell.Run("cmd /c \"\"" + this.path.dgindex + "\" -i \"" + this.args.input + "\" -o \"" + this.path.temp + "\" " + this.settings.dgindex + " -om 0\"", this.settings.window, true);
             if (!acLib.checkErr(parseInt(err), [-1073741510])) return false;
             if (!acLib.existFiles([this.path.temp + ".d2v"])) return false;
         }
@@ -762,31 +721,11 @@ AutoConvert.prototype = {
         return true;
     },
     joinlogoscp: function() {
-        //2019-08-25 11:50:28 SIREN_Fix d2vファイルが作成されないのでifステートメント全て追加 DGDecordNVは考慮していない
-        //JLSのASVファイルからNV関連を消す
-        //TSParserを使う
-        //Delayを入れ替える
-        //注意)何も処理されないときはAviSynthの問題
-
-        //tsparserを使う為オリジナル処理追加
-        var tsparser = acLib.acPath() + "MPEG-API_Utils\\bin\\x64\\ts_parser.exe"
-        //acLib.log(tsparser, 0);
-        if (!acLib.fso.FileExists(tsparser)) return false;
-        //acLib.log("cmd /c \"\"" + tsparser + "\" --mode da --delay-type 3 --debug 2 --log \"" + this.path.temp + ".tsparser.txt\" \"" + this.args.input + "\"", 0);
-        var err = acLib.shell.Run("cmd /c \"\"" + tsparser + "\" --ouput \"" + this.path.temp + "\" --mode da --delay-type 3 --debug 2 --log \"" + this.path.temp + ".tsparser.txt\" \"" + this.args.input + "\"", this.settings.window, true);
-        if (!this.getAacPF()) return;
-        //tsparserを使う為オリジナル処理追加ココまで
-
-        //2019-08-26 21:51:28 SIREN_Fix 書いてあったけどCM_Cutの場合はいらない
-        //正しく修正するにはCM_Cut以外の場合も考慮してif文で分岐する必要がある。
-        //if (acLib.fso.FileExists(this.args.input + ".avs")) return true;
+        if (acLib.fso.FileExists(this.args.input + ".avs")) return true;
         
         if (!acLib.copyFile(this.path.jlsavs, this.path.temp + ".jls.avs")) return false;
-
-        //2019-08-26 04:10:06 SIREN_Fix jls.avsの置き換えを変更 L-SMASHを使用するようにavsを変更したのでvideo=*.tsに変更
-        //if (!acLib.replaceFile(this.path.temp + ".jls.avs", "Shift-JIS", "Shift-JIS", ["__ac__", acLib.acPath(), "__nv__", "nv = " + this.param.nv, "__vid__", this.path.temp + ((this.param.nv) ? ".dgi" : ".d2v"), "__aud__", this.temp.aac, "__del__", this.temp.delay / 1000])) return false;
-        if (!acLib.replaceFile(this.path.temp + ".jls.avs", "Shift-JIS", "Shift-JIS", ["__ac__", acLib.acPath(), "__vid__", this.temp.base + ".ts", "__aud__", this.temp.aac, "__del__", this.temp.delay / 1000])) return false;
-
+        if (!acLib.replaceFile(this.path.temp + ".jls.avs", "Shift-JIS", "Shift-JIS", ["__ac__", acLib.acPath(), "__nv__", "nv = " + this.param.nv, "__vid__", this.path.temp + ((this.param.nv) ? ".dgi" : ".d2v"), "__aud__", this.temp.aac, "__del__", this.temp.delay / 1000])) return false;
+        
         var err = acLib.shell.Run("cmd /c \"\"" + this.path.logoframe + "\" \"" + this.path.temp + ".jls.avs\" -logo \"" + this.temp.base + ".lgd\" -oa \"" + this.path.temp + ".logoframe.txt\" " + this.settings.logoframe + "\"", this.settings.window, true);
         if (!acLib.checkErr(parseInt(err), [-1073741510])) return false;
         if (!acLib.existFiles([this.path.temp + ".logoframe.txt"])) return false;
@@ -794,7 +733,7 @@ AutoConvert.prototype = {
         var err = acLib.shell.Run("cmd /c \"\"" + this.path.chapterexe + "\" -v \"" + this.path.temp + ".jls.avs\" -o \"" + this.path.temp + ".chapterexe.txt\" " + this.settings.chapterexe + "\"", this.settings.window, true);
         if (!acLib.checkErr(parseInt(err), [-1073741510])) return false;
         if (!acLib.existFiles([this.path.temp + ".chapterexe.txt"])) return false;
-
+        
         var err = acLib.shell.Run("cmd /c \"\"" + this.path.joinlogoscp + "\" -inlogo \"" + this.path.temp + ".logoframe.txt\" -inscp \"" + this.path.temp + ".chapterexe.txt\" -incmd \"" + this.path.jlscmd + "\" -o \"" + this.args.input + ".avs\" " + this.settings.joinlogoscp + "\"", this.settings.window, true);
         if (!acLib.checkErr(parseInt(err), [-1073741510])) return false;
         if (!acLib.existFiles([this.args.input + ".avs"])) return false;
@@ -842,29 +781,22 @@ AutoConvert.prototype = {
                 acLib.log("Trim情報を取得出来ませんでした", 1);
                 return false;
             }
-
+            
             trim = trim.split(" ").join("").split(/(\(|\)|,|\+\+)/);
             this.temp.trim.str = [];
-
             for (var i = 0; i < trim.length - 2; i++) {
                 if (trim[i].match(/trim/i)) {
-                    //2019-08-27 23:49:23 SIREN_Fix 下記2行が間違っている
-                    //this.temp.trim.arr[0].push(trim[i + 1]);
-                    //this.temp.trim.arr[1].push(trim[i + 2]);
-                    //2019-08-27 23:50:11 SIREN_Fix 下記2行が正しい
-                    this.temp.trim.arr.push(trim[i + 1]);
-                    this.temp.trim.arr.push(trim[i + 2]);
+                    this.temp.trim.arr[0].push(trim[i + 1]);
+                    this.temp.trim.arr[1].push(trim[i + 2]);
                     this.temp.trim.str.push("trim(" + trim[i + 1] + "," + trim[i + 2] + ")");
                     i += 2;
                 }
             }
-
             if (this.temp.trim.arr.length == 0) {
                 acLib.log("Trim情報を取得出来ませんでした", 1);
                 return false;
             }
             this.temp.trim.str = this.temp.trim.str.join(" ++ ");
-            //acLib.log(this.temp.trim.str , 0); //SIREN確認
         }
         if (!this.param.cut) {
             if (!acLib.replaceFile(this.path.temp + ".avs", "Shift-JIS", "Shift-JIS", ["__ac__", acLib.acPath(), "__trim__", this.temp.trim.str])) return false;
@@ -1008,10 +940,7 @@ AutoConvert.prototype = {
         }
         var trim = [];
         for (var i = 0; i < this.temp.trim.arr.length; i++) {
-            //2019-08-28 05:50:56 SIREN_Fix trim値確認
-            //acLib.log(this.temp.trim.arr[i], 0);
             var sec = Math.round(this.temp.trim.arr[i] / (30000/1001));
-
             if (sec == 0) sec = 1;
             
             if (trim.length > 0 && Math.abs(sec - trim[trim.length - 1]) <= 1) {
@@ -1028,7 +957,6 @@ AutoConvert.prototype = {
         for (var i = 0; i < trim.length; i++) {
             var time = [];
             var sec = trim[i];
-                //acLib.log(sec, 0);
             time.push(("0" + String(sec % 60)).slice(-2));
             sec = Math.floor(sec / 60);
             time.push(("0" + String(sec % 60)).slice(-2));
@@ -1037,9 +965,7 @@ AutoConvert.prototype = {
             time.reverse();
             trim[i] = time.join(":");
         }
-        
         var cut = trim.join(",");
-        //acLib.log(cut, 0);
         
         var err = acLib.shell.Run("cmd /c \"\"" + this.path.tssplitter + "\" " + this.settings.tssplitter + " -OUT \"" + this.path.temppath.slice(0, -1) + "\" -CUT" + cut + " \"" + this.args.input + "\"\"", this.settings.window, true);
         if (!acLib.checkErr(parseInt(err), [-1073741510])) return false;

@@ -1,24 +1,3 @@
-#LSMASHSource.dll’Ç‰Á################################################
-function LWLibavVideoSource_(string source, int "stream_index") {
-    LoadPlugin(PluginDir + "LSMASHSource.dll")
-
-    stream_index = default(stream_index, -1)
-
-    clip = LWLibavVideoSource(source=source, stream_index=stream_index, repeat=true).AssumeFPS(30000, 1001)
-    return clip
-}
-
-function LWLibavAudioSource_(string source, int "stream_index", bool "av_sync") {
-    LoadPlugin(PluginDir + "LSMASHSource.dll")
-
-    stream_index = default(stream_index, -1)
-    av_sync = default(av_sync, false)
-
-    clip = LWLibavAudioSource(source=source, stream_index=stream_index, av_sync=av_sync)
-    return clip
-}
-#LSMASHSource.dll’Ç‰Á################################################
-
 Function DGDecode_(string vid) {
   LoadPlugin(PluginDir + "DGDecode.dll")
   clp = MPEG2Source(vid)

@@ -1,15 +1,18 @@
-SetMemoryMax(1024)
+SetMemoryMax(4096)
 
 global PluginDir = "__ac__Avisynth\"
 global PresetDir = "__ac__Preset\"
 
 Import(PresetDir + "function.avsi")
 
-__nv__
+# MTÇÃê›íËì«Ç›çûÇ›
+Import("D:\Project\Media_Player\TV_Project\CM_Cut\AutoConvert_v2.3.0_rev2\Preset\MT.avsi")
 
-video = (nv == true) ? DGDecodeNV_("__vid__") : DGDecode_("__vid__")
-audio = BassAudio_("__aud__")
+video = LWLibavVideoSource_("__vid__")
+audio = LWLibavAudioSource_("__aud__")
 AudioDub(video, audio)
 DelayAudio(last, __del__)
-Deint_(last)
+##Deint_(last)
 ConvertToYUY2()
+Prefetch(4)
+return last
