@@ -1,8 +1,8 @@
 # AutoConvert 2.3.0 TSCut特化バージョン
----
+
 ## Overview
 
-らんだむ★けんきゅうじょさんのAutoConvert2.3.0をベースにTSCutに特化した改変バージョンです。
+らんだむ★けんきゅうじょさんのAutoConvert2.3.0をベースにTSCutに特化した改変バージョンです。  
 LSMASHSource AviSynthPlus AvsPmod joinlogoscp 64bit化 に対応しています。
 
 <!--  ## Description
